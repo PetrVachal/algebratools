@@ -109,8 +109,12 @@ class VariableAlgExp(AlgExp, ABC):
             elif isinstance(expression, VariableAlgExp):
                 self._variables_domains = deepcopy(expression.variables_domains)
         else:
+            from algsettools import IntervalAlgSet
             self.__check_variables_domains(variables_domains)
             self._variables_domains = deepcopy(variables_domains)
+            unspecified_variables: list = list(set(self.variables) - set(variables_domains))
+            for unspecified_variable in unspecified_variables:
+                self._variables_domains[unspecified_variable] = IntervalAlgSet()
 
     def __found_and_get_immutable_contents(self, expression: str) -> dict:
         """
