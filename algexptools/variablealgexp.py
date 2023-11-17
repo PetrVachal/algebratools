@@ -209,13 +209,18 @@ class VariableAlgExp(AlgExp, ABC):
         :param subs_dict: dictionary with {key: value} <=> {variable: number to substitute}
         :return: instance of AlgExp
         """
-        new_instance = deepcopy(alg_exp)
         must_be_instance: str = ErrorMessages.replace(ErrorMessages.EXP_MUST_BE_INSTANCE, VariableAlgExp.__name__)
         assert isinstance(alg_exp, VariableAlgExp), f"{AlgExp._ERR}{must_be_instance}"
+        new_instance = deepcopy(alg_exp)
+        new_variables_domains: dict = deepcopy(new_instance.variables_domains)
         for variable in subs_dict:
             if variable in new_instance:
                 type(new_instance)._substitute(new_instance, variable, subs_dict[variable])
-        exp_result = AlgExp.initializer(str(new_instance))
+                del new_variables_domains[variable]
+        if new_variables_domains:
+            exp_result = type(new_instance)(str(new_instance), new_variables_domains)
+        else:
+            exp_result = AlgExp.initializer(str(new_instance))
         del new_instance  # this instance may contain conflicting data, it served only for content substitution
         return exp_result
 
