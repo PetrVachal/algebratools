@@ -46,6 +46,29 @@ class VariableAlgExp(AlgExp, ABC):
     def variables_domains(self) -> dict:
         return self._variables_domains
 
+    def substitute(self, subs_dict: dict):
+        """
+        Returns new instance of VariableAlgExp with substituted variables
+        based on substitution dictionary.
+        :param subs_dict: dictionary with {key: value} <=> {variable: number to substitute}
+        :return: instance of AlgExp
+        """
+        must_be_instance: str = ErrorMessages.replace(ErrorMessages.MUST_BE_INSTANCE, "Expression",
+                                                      VariableAlgExp.__name__)
+        assert isinstance(self, VariableAlgExp), f"{AlgExp._ERR}{must_be_instance}"
+        new_instance = deepcopy(self)
+        new_variables_domains: dict = deepcopy(new_instance.variables_domains)
+        for variable in subs_dict:
+            if variable in new_instance:
+                type(new_instance)._substitute(new_instance, variable, subs_dict[variable])
+                del new_variables_domains[variable]
+        if new_variables_domains:
+            exp_result = type(new_instance)(str(new_instance), new_variables_domains)
+        else:
+            exp_result = AlgExp.initializer(str(new_instance))
+        del new_instance  # this instance may contain conflicting data, it served only for content substitution
+        return exp_result
+
     def _correction(self, expression: str) -> str:
         # substitution for immutable contents
         immutable_contents: dict = self.__found_and_get_immutable_contents(expression)
@@ -205,31 +228,6 @@ class VariableAlgExp(AlgExp, ABC):
             expression = expression.replace(f"{left_imm_br}{key}{right_imm_br}",
                                             f"{left_imm_br}{immutable_contents[key]}{right_imm_br}")
         return expression
-
-    @staticmethod
-    def substituted(alg_exp, subs_dict: dict):
-        """
-        Returns new instance of VariableAlgExp with substituted variables
-        based on substitution dictionary.
-        :param alg_exp: any variable algebraic expression
-        :param subs_dict: dictionary with {key: value} <=> {variable: number to substitute}
-        :return: instance of AlgExp
-        """
-        must_be_instance: str = ErrorMessages.replace(ErrorMessages.MUST_BE_INSTANCE, "Expression",
-                                                      VariableAlgExp.__name__)
-        assert isinstance(alg_exp, VariableAlgExp), f"{AlgExp._ERR}{must_be_instance}"
-        new_instance = deepcopy(alg_exp)
-        new_variables_domains: dict = deepcopy(new_instance.variables_domains)
-        for variable in subs_dict:
-            if variable in new_instance:
-                type(new_instance)._substitute(new_instance, variable, subs_dict[variable])
-                del new_variables_domains[variable]
-        if new_variables_domains:
-            exp_result = type(new_instance)(str(new_instance), new_variables_domains)
-        else:
-            exp_result = AlgExp.initializer(str(new_instance))
-        del new_instance  # this instance may contain conflicting data, it served only for content substitution
-        return exp_result
 
     @staticmethod
     def _substitute(alg_exp, variable: str, number: Any):
