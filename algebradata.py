@@ -4,13 +4,6 @@ class AlgebraData:
     Contains strings for:
     number system domains, interval and set brackets, operators
     """
-    # number system domains
-    N: str = "N"
-    Z: str = "Z"
-    Q: str = "Q"
-    R: str = "R"
-    C: str = "C"
-    NUMBER_SYSTEM_DOMAINS: tuple = (N, Z, Q, R, C)  # depends on the order! (from natural to complex numbers)
     # common brackets
     LEFT_BRACKET: str = "("
     RIGHT_BRACKET: str = ")"

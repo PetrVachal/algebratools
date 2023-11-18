@@ -45,7 +45,7 @@ class NumericAtomicAlgExp(NumericAlgExp, AtomicAlgExp):
         return True
 
     def _create_content_from_complex(self, expression: complex) -> None:
-        is_not_atomic: str = ErrorMessages.replace(ErrorMessages.IS_NOT_ATOMIC, expression)
+        is_not_atomic: str = ErrorMessages.replace(ErrorMessages.IS_NOT_EXP, (expression, AtomicAlgExp.__name__))
         assert expression.real == 0 or expression.imag == 0, f"{self._ERR}{is_not_atomic}"
         if expression.real:  # further, the creation is delegated to the float method
             self._create_content_from_float(expression.real)
@@ -60,7 +60,7 @@ class NumericAtomicAlgExp(NumericAlgExp, AtomicAlgExp):
                     self._content = Ad.IMAG_UNIT
 
     def _create_content_from_float(self, expression: float) -> None:
-        is_not_atomic: str = ErrorMessages.replace(ErrorMessages.IS_NOT_ATOMIC, expression)
+        is_not_atomic: str = ErrorMessages.replace(ErrorMessages.IS_NOT_EXP, (expression, AtomicAlgExp.__name__))
         for special_string in Ad.SPECIAL_NUMERIC_STRINGS:
             if str(expression) in (special_string, f"{Ad.MINUS}{special_string}"):
                 self._content = str(expression)
@@ -70,7 +70,7 @@ class NumericAtomicAlgExp(NumericAlgExp, AtomicAlgExp):
 
     def _create_content_from_str(self, expression: str) -> None:
         corrected_expression: str = self._correction(expression)
-        is_not_atomic: str = ErrorMessages.replace(ErrorMessages.IS_NOT_ATOMIC, expression)
+        is_not_atomic: str = ErrorMessages.replace(ErrorMessages.IS_NOT_EXP, (expression, AtomicAlgExp.__name__))
         assert re.search(self._allowed_content_pattern, corrected_expression), f"{self._ERR}{is_not_atomic}"
         if re.search(Patterns.FLOAT_NUMBER, corrected_expression):
             self._create_content_from_float(float(corrected_expression))

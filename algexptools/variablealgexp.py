@@ -166,7 +166,8 @@ class VariableAlgExp(AlgExp, ABC):
                 # end of current area
                 end_index = i - 1
                 if start_index == -1:
-                    is_not_variable: str = ErrorMessages.replace(ErrorMessages.IS_NOT_VARIABLE, expression)
+                    is_not_variable: str = ErrorMessages.replace(ErrorMessages.IS_NOT_EXP,
+                                                                 (expression, VariableAlgExp.__name__))
                     raise ValueError(f"{self._ERR}{is_not_variable}")
                 if start_index <= end_index:
                     areas.append((start_index, end_index))
@@ -213,7 +214,8 @@ class VariableAlgExp(AlgExp, ABC):
         :param subs_dict: dictionary with {key: value} <=> {variable: number to substitute}
         :return: instance of AlgExp
         """
-        must_be_instance: str = ErrorMessages.replace(ErrorMessages.EXP_MUST_BE_INSTANCE, VariableAlgExp.__name__)
+        must_be_instance: str = ErrorMessages.replace(ErrorMessages.MUST_BE_INSTANCE,
+                                                      ("Expression", VariableAlgExp.__name__))
         assert isinstance(alg_exp, VariableAlgExp), f"{AlgExp._ERR}{must_be_instance}"
         new_instance = deepcopy(alg_exp)
         new_variables_domains: dict = deepcopy(new_instance.variables_domains)
@@ -239,7 +241,7 @@ class VariableAlgExp(AlgExp, ABC):
         """
         allowed_subs_types: tuple = (int, str)
         types_names: str = " | ".join([x.__name__ for x in allowed_subs_types])
-        must_be_instance: str = ErrorMessages.replace(ErrorMessages.NUMBER_MUST_BE_INSTANCE, types_names)
+        must_be_instance: str = ErrorMessages.replace(ErrorMessages.MUST_BE_INSTANCE, ("number", types_names))
         assert isinstance(number, allowed_subs_types), f"{VariableAlgExp._ERR}{must_be_instance}"
         if isinstance(number, str):
             assert re.search(rf"{Ad.MINUS}?\d+", number), f"{AlgExp._ERR}{ErrorMessages.MUST_BE_INTEGER}"

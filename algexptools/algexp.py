@@ -142,7 +142,8 @@ class AlgExp(ABC):
         :param expression: any algebraic expression
         :return: None
         """
-        must_be_instance: str = ErrorMessages.replace(ErrorMessages.EXP_MUST_BE_INSTANCE, self.__class__)
+        must_be_instance: str = ErrorMessages.replace(ErrorMessages.MUST_BE_INSTANCE,
+                                                      ("Expression", self.__class__.__name__))
         assert isinstance(expression, self.__class__), f"{self._ERR}{must_be_instance}"
         self._content = expression.content
 
@@ -291,8 +292,8 @@ class AlgExp(ABC):
                 return actual_class(expression)
             except (AssertionError, ValueError):
                 pass
-        is_not_composite: str = ErrorMessages.replace(ErrorMessages.IS_NOT_ALG_EXP, expression)
-        raise ValueError(f"{AlgExp._ERR}{is_not_composite}")
+        is_not_alg_exp: str = ErrorMessages.replace(ErrorMessages.IS_NOT_EXP, (expression, AlgExp.__name__))
+        raise ValueError(f"{AlgExp._ERR}{is_not_alg_exp}")
 
     @staticmethod
     def _bracketing(expression: str, analyzed_brackets: list = None) -> list:
