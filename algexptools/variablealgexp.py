@@ -1,7 +1,8 @@
 from abc import ABC, abstractmethod
 from copy import deepcopy
-import re
+from functools import singledispatchmethod
 from typing import Any, List, Tuple
+import re
 
 from algebradata import AlgebraData as Ad
 from algexptools import AlgExp
@@ -23,7 +24,10 @@ class VariableAlgExp(AlgExp, ABC):
 
     def __init__(self, expression: Any, variables_domains: dict = None):
         super().__init__(expression)
-        self.__create_variable_domains(expression, variables_domains)
+        if variables_domains is None:
+            self.__create_variables_domains(expression)
+        else:
+            self.__create_variables_domains(variables_domains)
         self.__create_immutable_contents(expression)
 
     @abstractmethod
@@ -119,26 +123,36 @@ class VariableAlgExp(AlgExp, ABC):
             return
         self._immutable_contents = deepcopy(self.__found_and_get_immutable_contents(expression))
 
-    def __create_variable_domains(self, expression: Any, variables_domains: dict | None) -> None:
+    @singledispatchmethod
+    def __create_variables_domains(self, something):
+        pass
+
+    @__create_variables_domains.register(object)
+    def _1(self, expression: Any) -> None:
         """
         Creates variable domains for all variable in expression.
         :param expression: any algebraic expression
-        :param variables_domains: predefined domains or None
         :return: None
         """
-        if variables_domains is None:
-            if isinstance(expression, str):
-                self._variables_domains = self.__generate_default_variables_domains()
-            elif isinstance(expression, VariableAlgExp):
-                self._variables_domains = deepcopy(expression.variables_domains)
-        else:
-            from algsettools import IntervalAlgSet
-            self.__check_variables_domains(variables_domains)
-            self._variables_domains = deepcopy(variables_domains)
-            variables_names: list = [variable.content for variable in self.variables]
-            unspecified_variables: list = list(set(variables_names) - set(variables_domains))
-            for unspecified_variable in unspecified_variables:
-                self._variables_domains[unspecified_variable] = IntervalAlgSet()
+        if isinstance(expression, str):
+            self._variables_domains = self.__generate_default_variables_domains()
+        elif isinstance(expression, VariableAlgExp):
+            self._variables_domains = deepcopy(expression.variables_domains)
+
+    @__create_variables_domains.register(dict)
+    def _2(self, variables_domains: dict) -> None:
+        """
+        Creates variable domains for all variable in expression.
+        :param variables_domains: predefined domains
+        :return: None
+        """
+        from algsettools import IntervalAlgSet
+        self.__check_variables_domains(variables_domains)
+        self._variables_domains = deepcopy(variables_domains)
+        variables_names: list = [variable.content for variable in self.variables]
+        unspecified_variables: list = list(set(variables_names) - set(variables_domains))
+        for unspecified_variable in unspecified_variables:
+            self._variables_domains[unspecified_variable] = IntervalAlgSet()
 
     def __found_and_get_immutable_contents(self, expression: str) -> dict:
         """
