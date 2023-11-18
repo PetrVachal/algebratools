@@ -27,9 +27,6 @@ class AtomicAlgExp(AlgExp, ABC):
         string_item: str = str(item)
         if self._content == string_item:
             return True
-        if isinstance(self,
-                      VariableAtomicAlgExp) and self.normalized_variable == string_item and self.is_minus_variable():
-            return True
         return False
 
     def __str__(self):
