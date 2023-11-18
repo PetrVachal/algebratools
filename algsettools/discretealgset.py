@@ -95,7 +95,7 @@ class DiscreteAlgSet(AlgSet):
         :param number: any NumericAlgExp instance
         :return: None
         """
-        exp_not_in_set: str = ErrorMessages.replace(ErrorMessages.EXP_NOT_IN_SET, (number, self))
+        exp_not_in_set: str = ErrorMessages.replace(ErrorMessages.EXP_NOT_IN_SET, number, self)
         wanted_number_index: int = self.__first_index_of_number(number)
         if wanted_number_index == -1:
             raise ValueError(f"{self._ERR}{exp_not_in_set}")

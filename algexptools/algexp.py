@@ -142,8 +142,8 @@ class AlgExp(ABC):
         :param expression: any algebraic expression
         :return: None
         """
-        must_be_instance: str = ErrorMessages.replace(ErrorMessages.MUST_BE_INSTANCE,
-                                                      ("Expression", self.__class__.__name__))
+        must_be_instance: str = ErrorMessages.replace(ErrorMessages.MUST_BE_INSTANCE, "Expression",
+                                                      self.__class__.__name__)
         assert isinstance(expression, self.__class__), f"{self._ERR}{must_be_instance}"
         self._content = expression.content
 
@@ -292,7 +292,7 @@ class AlgExp(ABC):
                 return actual_class(expression)
             except (AssertionError, ValueError):
                 pass
-        is_not_alg_exp: str = ErrorMessages.replace(ErrorMessages.IS_NOT_EXP, (expression, AlgExp.__name__))
+        is_not_alg_exp: str = ErrorMessages.replace(ErrorMessages.IS_NOT_EXP, expression, AlgExp.__name__)
         raise ValueError(f"{AlgExp._ERR}{is_not_alg_exp}")
 
     @staticmethod

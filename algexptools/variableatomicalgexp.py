@@ -34,7 +34,7 @@ class VariableAtomicAlgExp(VariableAlgExp, AtomicAlgExp):
     def _create_content_from_str(self, expression: str) -> None:
         minus: str = Ad.MINUS
         left_imm_br, right_imm_br = Ad.LEFT_IMMUTABLE_BRACKET, Ad.RIGHT_IMMUTABLE_BRACKET
-        is_not_atomic: str = ErrorMessages.replace(ErrorMessages.IS_NOT_EXP, (expression, AtomicAlgExp.__name__))
+        is_not_atomic: str = ErrorMessages.replace(ErrorMessages.IS_NOT_EXP, expression, AtomicAlgExp.__name__)
         corrected_expression: str = self._correction(expression)
         is_minus: bool = corrected_expression.startswith(f"{minus}{left_imm_br}")
         if is_minus:

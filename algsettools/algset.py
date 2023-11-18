@@ -183,7 +183,7 @@ class AlgSet(ABC):
                     return IntervalAlgSet(l2, u1, l2_closed, True)
             case _:
                 intersection_not_recognized: str = ErrorMessages.replace(ErrorMessages.INTERSECTION_NOT_RECOGNIZED,
-                                                                         (interval1, interval2))
+                                                                         interval1, interval2)
                 raise ValueError(f"{AlgSet._ERR}{intersection_not_recognized}")
 
     @staticmethod
@@ -458,7 +458,7 @@ class AlgSet(ABC):
                     return IntervalAlgSet(l1, u1, l1_closed, True)
             case _:
                 intersection_not_recognized: str = ErrorMessages.replace(ErrorMessages.INTERSECTION_NOT_RECOGNIZED,
-                                                                         (interval1, interval2))
+                                                                         interval1, interval2)
                 raise ValueError(f"{AlgSet._ERR}{intersection_not_recognized}")
 
     @staticmethod

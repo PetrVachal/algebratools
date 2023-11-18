@@ -77,7 +77,7 @@ class CompositeAlgExp(AlgExp, ABC):
         left_br, right_br = Ad.LEFT_BRACKET, Ad.RIGHT_BRACKET
         left_imm_br, right_imm_br = Ad.LEFT_IMMUTABLE_BRACKET, Ad.RIGHT_IMMUTABLE_BRACKET
         analyzed_brackets: List[Tuple[str, str]] = [(left_br, right_br), (left_imm_br, right_imm_br)]
-        is_not_composite: str = ErrorMessages.replace(ErrorMessages.IS_NOT_EXP, (expression, CompositeAlgExp.__name__))
+        is_not_composite: str = ErrorMessages.replace(ErrorMessages.IS_NOT_EXP, expression, CompositeAlgExp.__name__)
         indexes_of_operators: dict = {operator: [] for operator in Ad.OPERATORS}
         expression_parts: list = []
         operator_for_split: str = ""

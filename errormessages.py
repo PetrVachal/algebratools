@@ -26,12 +26,10 @@ class ErrorMessages:
     VAR_HAS_EMPTY_SET_DOMAIN: str = f"Domain of a variable '{__sub_chr}1' is an empty set"
 
     @staticmethod
-    def replace(message: str, strings_to_replace: Any) -> str:
+    def replace(message: str, *args) -> str:
         sub: str = ErrorMessages.__sub_chr
-        if not isinstance(strings_to_replace, (list, tuple)):
-            return message.replace(f"{sub}1", str(strings_to_replace))
         replaced_string: str = message
-        for i, string_to_replace in enumerate(strings_to_replace):
+        for i, string_to_replace in enumerate(args):
             replaced_string = replaced_string.replace(f"{sub}{i + 1}", str(string_to_replace))
         return replaced_string
     
