@@ -54,7 +54,7 @@ class VariableAtomicAlgExp(VariableAlgExp, AtomicAlgExp):
             (
                 not isinstance(expression, str) or Ad.LEFT_IMMUTABLE_BRACKET in expression or re.search(
                     self._allowed_content_pattern, self._replace_immutable_areas(expression)),
-                "Expression must be a variable without any operations (see doc)")
+                "Expression must be a variable without any operations and signs (see doc)")
         ]
         super()._init_check(expression)
 

@@ -8,6 +8,7 @@ class Patterns:
     __minus, __plus = Ad.MINUS, Ad.PLUS
     __left_part: str = rf"^\{__left_br}*[\{__minus}\{__plus}]*"
     __right_part: str = rf"\{__right_br}*$"
+    __left_part_without_signs: str = rf"^\{__left_br}*"
     __wrapped_numeric_strings: str = ""
     for special_string in Ad.SPECIAL_NUMERIC_STRINGS:
         __wrapped_numeric_strings += rf"{__left_part}{special_string}{__right_part}|"
@@ -35,7 +36,7 @@ class Patterns:
     ALLOWED_NUMERIC_ATOMIC_CONTENT: str = rf"{FLOAT_NUMBER}|{INTEGER}|{SPECIAL_NUMERIC_STRING}"
     ALLOWED_NUMERIC_COMPOSITE_CONTENT: str = "^[\\" + "\\".join(__numeric_allowed_backslash_characters) + "".join(
         __numeric_allowed_other_characters) + rf"\d\s]+$"
-    ALLOWED_SIMPLE_VARIABLE_ATOMIC_CONTENT: str = rf"{__left_part}{ALLOWED_VAR_CHARS_WITHOUT_IMAG_UNIT}{__right_part}"
+    ALLOWED_SIMPLE_VARIABLE_ATOMIC_CONTENT: str = rf"{__left_part_without_signs}{ALLOWED_VAR_CHARS_WITHOUT_IMAG_UNIT}{__right_part}"
     ALLOWED_VARIABLE_COMPOSITE_CONTENT: str = "^[\\" + "\\".join(__variable_allowed_backslash_characters) + "".join(
         __variable_allowed_other_characters) + rf"\d\s]+$"
     RESTRICTED_NUMERIC_COMPOSITE_CONTENT: str = rf"{ALLOWED_VAR_CHARS_WITHOUT_IMAG_UNIT}{__special_strings_divided_by_or}|{__special_strings_divided_by_or}{ALLOWED_VAR_CHARS_WITHOUT_IMAG_UNIT}"
