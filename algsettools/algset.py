@@ -603,7 +603,7 @@ class AlgSet(ABC):
         :param alg_set2: unionSet or discreteSet
         :return: union of given sets: discreteSet and unionSet
         """
-        from algsettools import DiscreteAlgSet, UnionAlgSet
+        from algsettools import DiscreteAlgSet, IntervalAlgSet, UnionAlgSet
         discrete_set, union_set = AlgSet.__pair_sets(alg_set1, alg_set2, DiscreteAlgSet)
         discrete_set, union_set = deepcopy(discrete_set), deepcopy(union_set)
         if union_set.discrete_set:
@@ -653,6 +653,7 @@ class AlgSet(ABC):
         :param union_set2: unionSet
         :return: union of two unionSets
         """
+        from algsettools import UnionAlgSet
         union_set1, union_set2 = deepcopy(union_set1), deepcopy(union_set2)
         return UnionAlgSet(*union_set1.content, *union_set2.discrete_set, *union_set2.intervals)
 
