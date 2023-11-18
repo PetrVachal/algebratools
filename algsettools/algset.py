@@ -658,17 +658,4 @@ class AlgSet(ABC):
 
 
 if __name__ == '__main__':
-    from algsettools import DiscreteAlgSet, IntervalAlgSet, UnionAlgSet
-    s1 = IntervalAlgSet(0, 1)
-    s2 = IntervalAlgSet(1, 2)
-    s3 = IntervalAlgSet(2, 3)
-    s4 = DiscreteAlgSet(1)
-    s5 = DiscreteAlgSet(2)
-    union_result1 = AlgSet.union(s1, s2, s4)
-    union_result2 = AlgSet.union(s1, s2)
-    union_result3 = UnionAlgSet(union_result2)
-    union_result4 = AlgSet.union(s4, s5, s3)
-    print(union_result1)
-    print(union_result2)
-    print(union_result3)
-    print(union_result4)
+    pass

@@ -1,5 +1,4 @@
 from algebradata import AlgebraData as Ad
-from typing import Any
 
 
 class ErrorMessages:

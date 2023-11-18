@@ -66,10 +66,6 @@ class VariableCompositeAlgExp(VariableAlgExp, CompositeAlgExp):
 
 
 if __name__ == '__main__':
-    exp1 = VariableCompositeAlgExp("x - y")
-    subs_exp1 = VariableAlgExp.substituted(exp1, {"x": "5", "y": "10"})
-    print(subs_exp1)
-    print(type(subs_exp1))
     while True:
         alg_exp_input: str = input(": ")
         if alg_exp_input == "exit":

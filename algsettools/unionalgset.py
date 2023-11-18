@@ -160,15 +160,4 @@ class UnionAlgSet(AlgSet):
 
 
 if __name__ == '__main__':
-    from algexptools import NumericAtomicAlgExp
-    s1 = IntervalAlgSet(5, 7)
-    s2 = IntervalAlgSet(1, 2)
-    s3 = IntervalAlgSet(NumericAtomicAlgExp("-inf"), 2)
-    s4 = DiscreteAlgSet(4, 5, 6)
-    s5 = DiscreteAlgSet(6, 4, 5)
-    union1 = UnionAlgSet(s1, s2, s3, s4)
-    union2 = UnionAlgSet(s1, s1, s2, s2, s4, s4)
-    print(union1)
-    print(union2)
-    print((1, union1, union2))
-    print(s4 == s5)
+    pass
