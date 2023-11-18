@@ -112,7 +112,8 @@ class VariableAlgExp(AlgExp, ABC):
             from algsettools import IntervalAlgSet
             self.__check_variables_domains(variables_domains)
             self._variables_domains = deepcopy(variables_domains)
-            unspecified_variables: list = list(set(self.variables) - set(variables_domains))
+            variables_names: list = [variable.content for variable in self.variables]
+            unspecified_variables: list = list(set(variables_names) - set(variables_domains))
             for unspecified_variable in unspecified_variables:
                 self._variables_domains[unspecified_variable] = IntervalAlgSet()
 
@@ -139,7 +140,7 @@ class VariableAlgExp(AlgExp, ABC):
         :return: default variable domains for all variables in self-expression
         """
         from algsettools import IntervalAlgSet
-        return {variable: IntervalAlgSet() for variable in self.variables}
+        return {variable.content: IntervalAlgSet() for variable in self.variables}
 
     def __get_immutable_content_areas(self, expression: str) -> list:
         """
