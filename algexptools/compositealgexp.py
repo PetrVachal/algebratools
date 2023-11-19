@@ -78,7 +78,7 @@ class CompositeAlgExp(AlgExp, ABC):
         left_imm_br, right_imm_br = Ad.LEFT_IMMUTABLE_BRACKET, Ad.RIGHT_IMMUTABLE_BRACKET
         analyzed_brackets: List[Tuple[str, str]] = [(left_br, right_br), (left_imm_br, right_imm_br)]
         is_not_composite: str = ErrorMessages.replace(ErrorMessages.IS_NOT_EXP, expression, CompositeAlgExp.__name__)
-        indexes_of_operators: dict = {operator: [] for operator in Ad.OPERATORS}
+        split_indexes: dict = {operator: [] for operator in Ad.OPERATORS}
         expression_parts: list = []
         operator_for_split: str = ""
         contains_variable: bool = False
@@ -86,21 +86,18 @@ class CompositeAlgExp(AlgExp, ABC):
         for i, deep_level in enumerate(bracketing):
             if deep_level == 0 and expression[i] in Ad.OPERATORS:
                 actual_operator: str = expression[i]
-                indexes_of_operators[actual_operator].append(i)
+                split_indexes[actual_operator].append(i)
         for operator in Ad.OPERATORS:
-            if indexes_of_operators[operator]:
+            if split_indexes[operator]:
+                split_indexes[operator].append(len(expression))
                 operator_for_split = operator
                 start_index: int = 0
-                for actual_index in indexes_of_operators[operator_for_split]:
+                for actual_index in split_indexes[operator_for_split]:
                     inner_alg_exp = AlgExp.initializer(expression[start_index:actual_index])
                     if not contains_variable and isinstance(inner_alg_exp, VariableAlgExp):
                         contains_variable = True
                     expression_parts.append(inner_alg_exp)
                     start_index = actual_index + 1
-                last_inner_alg_exp = AlgExp.initializer(expression[start_index:])
-                if not contains_variable and isinstance(last_inner_alg_exp, VariableAlgExp):
-                    contains_variable = True
-                expression_parts.append(last_inner_alg_exp)
                 break
         if operator_for_split == "":
             raise ValueError(f"{self._ERR}{is_not_composite}")
