@@ -251,13 +251,17 @@ class VariableAlgExp(AlgExp, ABC):
 
     def __check_variables_domains(self, variables_domains: dict) -> None:
         """
-        Checks whether any set from variable domains is not an empty set.
+        Checks if all variables domains are instances of AlgSet.
+        Further, checks whether any set from variable domains is not an empty set.
         If such a set is found, it throws an exception.
         :param variables_domains: variable domains for all variables in expression
         :return: None
         """
-        from algsettools import DiscreteAlgSet
+        from algsettools import AlgSet, DiscreteAlgSet
+        must_be_instance: str = ErrorMessages.replace(ErrorMessages.MUST_BE_INSTANCE, "Variable domain",
+                                                      AlgSet.__name__)
         for variable, alg_set in variables_domains.items():
+            assert isinstance(alg_set, AlgSet), f"{self._ERR}{must_be_instance}"
             if isinstance(alg_set, DiscreteAlgSet):
                 var_has_empty_domain: str = ErrorMessages.replace(ErrorMessages.VAR_HAS_EMPTY_SET_DOMAIN, variable)
                 assert not alg_set.is_empty(), f"{self._ERR}{var_has_empty_domain}"
