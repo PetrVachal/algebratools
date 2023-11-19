@@ -65,6 +65,5 @@ if __name__ == '__main__':
             print(f"exp: {alg_exp_outer}")
             print(f"variables: {alg_exp_outer.variables}")
             print(f"variables_domains: {alg_exp_outer.variables_domains}")
-            print(f"immutable_contents: {alg_exp_outer.immutable_contents}")
         except Exception as err:
             print(err)

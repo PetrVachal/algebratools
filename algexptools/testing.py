@@ -14,6 +14,5 @@ if __name__ == '__main__':
             elif isinstance(alg_exp, VariableAlgExp):
                 print(f"variables: {alg_exp.variables}")
                 print(f"variables_domains: {alg_exp.variables_domains}")
-                print(f"immutable_contents: {alg_exp.immutable_contents}")
         except (AssertionError, ValueError) as err:
             print(err)

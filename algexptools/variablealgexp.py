@@ -39,10 +39,6 @@ class VariableAlgExp(AlgExp, ABC):
         return NotImplemented
 
     @property
-    def immutable_contents(self):
-        return self._immutable_contents
-
-    @property
     def variables(self):
         return list(self._variables_domains)
 
@@ -149,7 +145,7 @@ class VariableAlgExp(AlgExp, ABC):
         :return: None
         """
         if isinstance(expression, VariableAlgExp):
-            self._immutable_contents = deepcopy(expression.immutable_contents)
+            self._immutable_contents = deepcopy(expression._immutable_contents)
             return
         self._immutable_contents = deepcopy(self.__found_and_get_immutable_contents(expression))
 
