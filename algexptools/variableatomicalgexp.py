@@ -23,17 +23,13 @@ class VariableAtomicAlgExp(VariableAlgExp, AtomicAlgExp):
         VariableAlgExp.__init__(self, expression, variables_domains)
 
     def _create_content_from_str(self, expression: str) -> None:
-        minus: str = Ad.MINUS
         left_imm_br, right_imm_br = Ad.LEFT_IMMUTABLE_BRACKET, Ad.RIGHT_IMMUTABLE_BRACKET
         is_not_atomic: str = ErrorMessages.replace(ErrorMessages.IS_NOT_EXP, expression, AtomicAlgExp.__name__)
         corrected_expression: str = self._correction(expression)
-        is_minus: bool = corrected_expression.startswith(f"{minus}{left_imm_br}")
-        if is_minus:
-            corrected_expression = corrected_expression[1:]
+        assert not corrected_expression.startswith(
+            f"{Ad.MINUS}{left_imm_br}"), f"{self._ERR}{ErrorMessages.MUST_BE_ATOMIC_VARIABLE}"
         assert self._is_wrapped_in_brackets(corrected_expression, left_imm_br, right_imm_br) or re.search(
             self._allowed_content_pattern, corrected_expression), f"{self._ERR}{is_not_atomic}"
-        if is_minus:
-            corrected_expression = f"{minus}{corrected_expression}"
         self._content = corrected_expression
 
     def _found_and_get_all_variables(self) -> list:
@@ -45,7 +41,7 @@ class VariableAtomicAlgExp(VariableAlgExp, AtomicAlgExp):
             (
                 not isinstance(expression, str) or Ad.LEFT_IMMUTABLE_BRACKET in expression or re.search(
                     self._allowed_content_pattern, self._replace_immutable_areas(expression)),
-                "Expression must be a variable without any operations and signs (see doc)")
+                ErrorMessages.MUST_BE_ATOMIC_VARIABLE)
         ]
         super()._init_check(expression)
 

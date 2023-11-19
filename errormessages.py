@@ -17,6 +17,7 @@ class ErrorMessages:
     INTERVAL_MUST_BE_CLOSED: str = f"Interval {__sub_chr}1 must be closed"
     IS_NOT_EXP: str = f"Expression '{__sub_chr}1' is not in the correct form for {__sub_chr}2"
     LEN_INTERVAL_MUST_BE_2: str = "Length of interval must be 2"
+    MUST_BE_ATOMIC_VARIABLE: str = "Expression must be a variable without any operations and signs (see doc)"
     MUST_BE_INSTANCE: str = f"{__sub_chr}1 must be instance of {__sub_chr}2"
     MUST_BE_INTEGER: str = "Number for substitution must be an integer"
     MUST_CONTAIN_VARIABLE: str = "VariableComposite expression must contain any variable"
