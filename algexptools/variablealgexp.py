@@ -44,7 +44,7 @@ class VariableAlgExp(AlgExp, ABC):
 
     @property
     def variables(self):
-        return self._found_and_get_all_variables()
+        return list(self._variables_domains)
 
     @property
     def variables_domains(self) -> dict:
@@ -111,6 +111,36 @@ class VariableAlgExp(AlgExp, ABC):
                 expression_list[i] = replace_character
         return "".join(expression_list)
 
+    def __correct_variables_domains(self, variables_domains: dict) -> dict:
+        """
+        Stores variable instances in variables_domains keys instead of content strings.
+        Further sets Interval(-inf, inf) as the default domain for variables
+        without a specified domain.
+        :param variables_domains: domains for all variables of self-expression
+        :return: corrected variables domains
+        """
+        from algsettools import IntervalAlgSet
+        all_variables: list = self._found_and_get_all_variables()
+        new_variables_domains: dict = {}
+        # storing instances in variables_domains keys
+        for variable in variables_domains:
+            if isinstance(variable, str):
+                for instance_variable in all_variables:
+                    if instance_variable.content == variable:
+                        new_variables_domains[instance_variable] = variables_domains[variable]
+                        break
+        found: bool
+        # occasional default domain assignment: Interval(-inf, inf)
+        for variable_from_all in all_variables:
+            found = False
+            for variable_from_new_domains in new_variables_domains:
+                if variable_from_new_domains.content == variable_from_all.content:
+                    found = True
+                    break
+            if not found:
+                new_variables_domains[variable_from_all] = IntervalAlgSet()
+        return new_variables_domains
+
     def __create_immutable_contents(self, expression: Any) -> None:
         """
         Creates substitution dictionary named as immutable_contents for all immutable
@@ -146,13 +176,9 @@ class VariableAlgExp(AlgExp, ABC):
         :param variables_domains: predefined domains
         :return: None
         """
-        from algsettools import IntervalAlgSet
         self.__check_variables_domains(variables_domains)
-        self._variables_domains = deepcopy(variables_domains)
-        variables_names: list = [variable.content for variable in self.variables]
-        unspecified_variables: list = list(set(variables_names) - set(variables_domains))
-        for unspecified_variable in unspecified_variables:
-            self._variables_domains[unspecified_variable] = IntervalAlgSet()
+        new_variables_domains: dict = self.__correct_variables_domains(variables_domains)
+        self._variables_domains = deepcopy(new_variables_domains)
 
     def __found_and_get_immutable_contents(self, expression: str) -> dict:
         """
@@ -177,7 +203,17 @@ class VariableAlgExp(AlgExp, ABC):
         :return: default variable domains for all variables in self-expression
         """
         from algsettools import IntervalAlgSet
-        return {variable.content: IntervalAlgSet() for variable in self.variables}
+        default_variable_domains: dict = {}
+        found: bool
+        for variable_from_all in self._found_and_get_all_variables():
+            found = False
+            for variable_from_default_domains in default_variable_domains:
+                if variable_from_default_domains.content == variable_from_all.content:
+                    found = True
+                    break
+            if not found:
+                default_variable_domains[variable_from_all] = IntervalAlgSet()
+        return default_variable_domains
 
     def __get_immutable_content_areas(self, expression: str) -> list:
         """
