@@ -108,7 +108,8 @@ class NumericCompositeAlgExp(NumericAlgExp, CompositeAlgExp):
                 operator_for_split = operator
                 start_index: int = 0
                 for actual_index in split_indexes[operator_for_split]:
-                    inner_alg_exp = AlgExp.initializer(expression[start_index:actual_index])
+                    inner_alg_exp = AlgExp.initializer(expression[start_index:actual_index], NumericAtomicAlgExp,
+                                                       NumericCompositeAlgExp)
                     expression_parts.append(inner_alg_exp)
                     start_index = actual_index + 1
                 break
