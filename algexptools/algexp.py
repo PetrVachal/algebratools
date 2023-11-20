@@ -259,11 +259,11 @@ class AlgExp(ABC):
         return replaced_string
 
     @staticmethod
-    def initializer(expression: Any = 0, classes_for_init: tuple = None):
+    def initializer(expression: Any = 0, *args):
         """
         Returns an instance of AlgExp based on classes for initialization.
         :param expression: any algebraic expression
-        :param classes_for_init: classes given to create an instance of AlgExp
+        :param args: classes given to create an instance of AlgExp
         :return: instance of AlgExp
         """
         def __all_subclasses(top_cls, allow_abstract: bool = False) -> tuple:
@@ -285,7 +285,8 @@ class AlgExp(ABC):
                 all_subclasses = tuple(cls for cls in all_subclasses if not isabstract(cls))
             return all_subclasses
 
-        if classes_for_init is None:
+        classes_for_init = args
+        if classes_for_init == ():
             classes_for_init = __all_subclasses(AlgExp)
         for actual_class in classes_for_init:
             try:

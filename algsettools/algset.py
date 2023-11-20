@@ -76,7 +76,7 @@ class AlgSet(ABC):
         """
         if isinstance(number, NumericAlgExp):
             return number
-        return AlgExp.initializer(number, (NumericAtomicAlgExp, NumericCompositeAlgExp))
+        return AlgExp.initializer(number, NumericAtomicAlgExp, NumericCompositeAlgExp)
 
     def _init_check(self, alg_set: Any) -> None:
         """

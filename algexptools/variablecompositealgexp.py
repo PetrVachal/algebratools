@@ -71,7 +71,7 @@ class VariableCompositeAlgExp(VariableAlgExp, CompositeAlgExp):
     def _init_check(self, expression: Any, variables_domains: dict = None) -> None:
         is_variable_exp: bool = False
         try:
-            AlgExp.initializer(expression, (NumericAtomicAlgExp, NumericCompositeAlgExp, VariableAtomicAlgExp))
+            AlgExp.initializer(expression, NumericAtomicAlgExp, NumericCompositeAlgExp, VariableAtomicAlgExp)
         except ValueError:
             is_variable_exp = True
         self._allowed_types = {}
