@@ -4,7 +4,7 @@ import re
 
 from algebradata import AlgebraData as Ad
 from errormessages import ErrorMessages
-from algexptools import AtomicAlgExp, CompositeAlgExp, NumericAlgExp, NumericAtomicAlgExp
+from algexptools import AlgExp, AtomicAlgExp, CompositeAlgExp, NumericAlgExp, NumericAtomicAlgExp
 from patterns import Patterns
 
 
@@ -92,6 +92,31 @@ class NumericCompositeAlgExp(NumericAlgExp, CompositeAlgExp):
     def is_complex(self) -> bool:
         return True  # every NumericAlgExp is a complex number
 
+    def _alg_exp_structure(self, expression: str) -> list:
+        is_not_composite: str = ErrorMessages.replace(ErrorMessages.IS_NOT_EXP, expression, CompositeAlgExp.__name__)
+        split_indexes: dict = {operator: [] for operator in Ad.OPERATORS}
+        expression_parts: list = []
+        operator_for_split: str = ""
+        bracketing: list = self._bracketing(expression)
+        for i, deep_level in enumerate(bracketing):
+            if deep_level == 0 and expression[i] in Ad.OPERATORS:
+                actual_operator: str = expression[i]
+                split_indexes[actual_operator].append(i)
+        for operator in Ad.OPERATORS:
+            if split_indexes[operator]:
+                split_indexes[operator].append(len(expression))
+                operator_for_split = operator
+                start_index: int = 0
+                for actual_index in split_indexes[operator_for_split]:
+                    inner_alg_exp = AlgExp.initializer(expression[start_index:actual_index])
+                    expression_parts.append(inner_alg_exp)
+                    start_index = actual_index + 1
+                break
+        if operator_for_split == "":
+            raise ValueError(f"{self._ERR}{is_not_composite}")
+        self._operator = operator_for_split
+        return expression_parts
+
     def _create_content_from_complex(self, expression: complex) -> None:
         self._operator = Ad.PLUS
         exp_from_real: NumericAtomicAlgExp = NumericAtomicAlgExp(expression.real)
@@ -118,7 +143,7 @@ class NumericCompositeAlgExp(NumericAlgExp, CompositeAlgExp):
         if re.search(Patterns.FLOAT_NUMBER, corrected_expression):
             self._create_content_from_float(float(corrected_expression))
         else:
-            self._content = self._alg_exp_structure(corrected_expression, is_variable_exp=False)
+            self._content = self._alg_exp_structure(corrected_expression)
             self._check_content()
 
     def _init_check(self, expression: Any, variables_domains: dict = None) -> None:

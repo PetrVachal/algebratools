@@ -1,5 +1,4 @@
-from abc import ABC
-from typing import List, Tuple
+from abc import ABC, abstractmethod
 import re
 
 from algebradata import AlgebraData as Ad
@@ -21,6 +20,16 @@ class CompositeAlgExp(AlgExp, ABC):
     _content: list = None
     _operator: str = None
     _simplified: bool = False
+
+    @abstractmethod
+    def _alg_exp_structure(self, expression: str) -> list:
+        """
+        Creates specific structure (named as content) for self instance from actual
+        expression string.
+        :param expression: any algebraic expression
+        :return: specific structure named as content for actual expression string
+        """
+        return NotImplemented
 
     def __contains__(self, item):
         super().__contains__(item)
@@ -62,49 +71,6 @@ class CompositeAlgExp(AlgExp, ABC):
             if inner_alg_exp.has_imag():
                 return True
         return False
-
-    def _alg_exp_structure(self, expression: str, is_variable_exp: bool) -> list:
-        """
-        Creates specific structure (named as content) for self instance from actual
-        expression string.
-        If content is to be created for a variable type, flag is_variable_exp is set
-        to True. Otherwise, it is set to False.
-        :param expression: any algebraic expression
-        :param is_variable_exp: flag for structure for variable expression
-        :return: specific structure named as content for actual expression string
-        """
-        from algexptools import VariableAlgExp
-        left_br, right_br = Ad.LEFT_BRACKET, Ad.RIGHT_BRACKET
-        left_imm_br, right_imm_br = Ad.LEFT_IMMUTABLE_BRACKET, Ad.RIGHT_IMMUTABLE_BRACKET
-        analyzed_brackets: List[Tuple[str, str]] = [(left_br, right_br), (left_imm_br, right_imm_br)]
-        is_not_composite: str = ErrorMessages.replace(ErrorMessages.IS_NOT_EXP, expression, CompositeAlgExp.__name__)
-        split_indexes: dict = {operator: [] for operator in Ad.OPERATORS}
-        expression_parts: list = []
-        operator_for_split: str = ""
-        contains_variable: bool = False
-        bracketing: list = self._bracketing(expression, analyzed_brackets)
-        for i, deep_level in enumerate(bracketing):
-            if deep_level == 0 and expression[i] in Ad.OPERATORS:
-                actual_operator: str = expression[i]
-                split_indexes[actual_operator].append(i)
-        for operator in Ad.OPERATORS:
-            if split_indexes[operator]:
-                split_indexes[operator].append(len(expression))
-                operator_for_split = operator
-                start_index: int = 0
-                for actual_index in split_indexes[operator_for_split]:
-                    inner_alg_exp = AlgExp.initializer(expression[start_index:actual_index])
-                    if not contains_variable and isinstance(inner_alg_exp, VariableAlgExp):
-                        contains_variable = True
-                    expression_parts.append(inner_alg_exp)
-                    start_index = actual_index + 1
-                break
-        if operator_for_split == "":
-            raise ValueError(f"{self._ERR}{is_not_composite}")
-        if not contains_variable and is_variable_exp:
-            raise ValueError(f"{self._ERR}{ErrorMessages.MUST_CONTAIN_VARIABLE}")
-        self._operator = operator_for_split
-        return expression_parts
 
     def _create_content_from_other_instance(self, expression):
         super()._create_content_from_other_instance(expression)
