@@ -30,10 +30,8 @@ class VariableAtomicAlgExp(VariableAlgExp, AtomicAlgExp):
             f"{Ad.MINUS}{left_imm_br}"), f"{self._ERR}{ErrorMessages.MUST_BE_ATOMIC_VARIABLE}"
         assert self._is_wrapped_in_brackets(corrected_expression, left_imm_br, right_imm_br) or re.search(
             self._allowed_content_pattern, corrected_expression), f"{self._ERR}{is_not_atomic}"
+        self._variables = [self]
         self._content = corrected_expression
-
-    def _found_and_get_all_variables(self) -> list:
-        return [self]
 
     def _init_check(self, expression: Any, variables_domains: dict = None) -> None:
         self._allowed_types = {}

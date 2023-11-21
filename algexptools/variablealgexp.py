@@ -1,4 +1,4 @@
-from abc import ABC, abstractmethod
+from abc import ABC
 from copy import deepcopy
 from functools import singledispatchmethod
 from typing import Any, List, Tuple
@@ -20,6 +20,7 @@ class VariableAlgExp(AlgExp, ABC):
 
     # common variables
     _immutable_contents: dict = None
+    _variables: list = None
     _variables_domains: dict = None
 
     def __init__(self, expression: Any, variables_domains: dict = None):
@@ -30,17 +31,9 @@ class VariableAlgExp(AlgExp, ABC):
             self.__create_variables_domains(variables_domains)
         self.__create_immutable_contents(expression)
 
-    @abstractmethod
-    def _found_and_get_all_variables(self) -> list:
-        """
-        Returns list of all variables in self-expression.
-        :return: list of all variables in self-expression
-        """
-        return NotImplemented
-
     @property
     def variables(self):
-        return list(self._variables_domains)
+        return self._variables
 
     @property
     def variables_domains(self) -> dict:
@@ -116,7 +109,7 @@ class VariableAlgExp(AlgExp, ABC):
         :return: corrected variables domains
         """
         from algsettools import IntervalAlgSet
-        all_variables: list = self._found_and_get_all_variables()
+        all_variables: list = self._variables
         new_variables_domains: dict = {}
         # storing instances in variables_domains keys
         for variable in variables_domains:
@@ -201,7 +194,7 @@ class VariableAlgExp(AlgExp, ABC):
         from algsettools import IntervalAlgSet
         default_variable_domains: dict = {}
         found: bool
-        for variable_from_all in self._found_and_get_all_variables():
+        for variable_from_all in self._variables:
             found = False
             for variable_from_default_domains in default_variable_domains:
                 if variable_from_default_domains.content == variable_from_all.content:
@@ -278,6 +271,20 @@ class VariableAlgExp(AlgExp, ABC):
             expression = expression.replace(f"{left_imm_br}{key}{right_imm_br}",
                                             f"{left_imm_br}{immutable_contents[key]}{right_imm_br}")
         return expression
+
+    @staticmethod
+    def _found_and_get_all_variables_contents(pre_content: list | str) -> list:
+        """
+        Returns list of all variables contents in self-expression.
+        :return: list of all variables contents in self-expression
+        """
+        if isinstance(pre_content, str):
+            return [pre_content]
+        variables: list = []
+        for inner_alg_exp in pre_content:
+            if isinstance(inner_alg_exp, VariableAlgExp):
+                variables += VariableAlgExp._found_and_get_all_variables_contents(inner_alg_exp.content)
+        return list(set(variables))
 
     @staticmethod
     def _substitute(alg_exp, variable: str, number: Any):
