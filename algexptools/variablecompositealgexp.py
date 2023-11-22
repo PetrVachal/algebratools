@@ -86,9 +86,9 @@ class VariableCompositeAlgExp(VariableAlgExp, CompositeAlgExp):
         ]
         super()._init_check(expression)
 
-    def __refresh_variables_domains(self, alg_exp) -> None:
+    def __refresh_variables(self, alg_exp) -> None:
         """
-        Refreshes variables domains for alg_exp based on self.variables.
+        Refreshes instances of variables for alg_exp based on self.variables.
         :param alg_exp: any variable algebraic expression
         :return: None
         """
@@ -116,7 +116,7 @@ class VariableCompositeAlgExp(VariableAlgExp, CompositeAlgExp):
                     substitution_dict[i] = variables_instances_by_content[inner_exp.content]
                 else:
                     self.__unify_same_variables(inner_exp.content)
-                self.__refresh_variables_domains(inner_exp)
+                self.__refresh_variables(inner_exp)
         for target_index in substitution_dict:
             pre_content[target_index] = substitution_dict[target_index]
 
@@ -134,9 +134,6 @@ class VariableCompositeAlgExp(VariableAlgExp, CompositeAlgExp):
 
 
 if __name__ == '__main__':
-    from algsettools import IntervalAlgSet
-    exp1 = VariableCompositeAlgExp("xy * (x + 1)", variables_domains={"x": IntervalAlgSet(0, 1)})
-    print(exp1, exp1.variables, exp1.variables_domains)
     while True:
         alg_exp_input: str = input(": ")
         if alg_exp_input == "exit":

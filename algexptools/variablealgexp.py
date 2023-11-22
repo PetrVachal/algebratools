@@ -109,18 +109,17 @@ class VariableAlgExp(AlgExp, ABC):
         :return: corrected variables domains
         """
         from algsettools import IntervalAlgSet
-        all_variables: list = self._variables
         new_variables_domains: dict = {}
         # storing instances in variables_domains keys
         for variable in variables_domains:
             if isinstance(variable, str):
-                for instance_variable in all_variables:
+                for instance_variable in self._variables:
                     if instance_variable.content == variable:
                         new_variables_domains[instance_variable] = variables_domains[variable]
                         break
         found: bool
         # occasional default domain assignment: Interval(-inf, inf)
-        for variable_from_all in all_variables:
+        for variable_from_all in self._variables:
             found = False
             for variable_from_new_domains in new_variables_domains:
                 if variable_from_new_domains.content == variable_from_all.content:
@@ -167,7 +166,8 @@ class VariableAlgExp(AlgExp, ABC):
         """
         self.__check_variables_domains(variables_domains)
         new_variables_domains: dict = self.__correct_variables_domains(variables_domains)
-        self._variables_domains = deepcopy(new_variables_domains)
+        self._variables_domains = new_variables_domains
+        self.__refresh_variables_domains(self)
 
     def __found_and_get_immutable_contents(self, expression: str) -> dict:
         """
@@ -254,6 +254,25 @@ class VariableAlgExp(AlgExp, ABC):
             if isinstance(alg_set, DiscreteAlgSet):
                 var_has_empty_domain: str = ErrorMessages.replace(ErrorMessages.VAR_HAS_EMPTY_SET_DOMAIN, variable)
                 assert not alg_set.is_empty(), f"{self._ERR}{var_has_empty_domain}"
+
+    def __refresh_variables_domains(self, alg_exp) -> None:
+        """
+        Refreshes variables domains in all inner expressions in alg_exp,
+        based on self.variables.
+        :param alg_exp: any variable algebraic expression
+        :return: None
+        """
+        from algexptools import VariableCompositeAlgExp
+        for inner_exp in alg_exp.content:
+            if not isinstance(inner_exp, VariableAlgExp):
+                continue
+            if isinstance(inner_exp, VariableCompositeAlgExp):
+                self.__refresh_variables_domains(inner_exp)
+            inner_exp._variables_domains = {}
+            for global_instance_variable in self._variables:
+                if global_instance_variable.content in inner_exp:
+                    inner_exp._variables_domains[global_instance_variable] = self._variables_domains[
+                        global_instance_variable]
 
     def __substitute_immutable_areas(self, expression: str, immutable_contents: dict, reverse: bool = False) -> str:
         """
