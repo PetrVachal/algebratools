@@ -275,8 +275,6 @@ class AlgExp(ABC):
             :param allow_abstract: flag for abstract classes [False]
             :return: all subclasses of top class (with/without abstract classes depending on allow_abstract)
             """
-            from algexptools import NumericAtomicAlgExp, NumericCompositeAlgExp, VariableAtomicAlgExp, \
-                VariableCompositeAlgExp
             actual_cls = top_cls
             all_subclasses: tuple = (actual_cls,)
             for cls in actual_cls.__subclasses__():
