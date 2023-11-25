@@ -1,4 +1,3 @@
-from inpt import Inpt
 from multipledispatch import dispatch
 from typing import Any
 
@@ -158,13 +157,4 @@ class IntervalAlgSet(AlgSet):
 
 
 if __name__ == '__main__':
-    inpt = Inpt(": ")
-    while True:
-        alg_set_input: tuple = inpt.inpt_multi()
-        if alg_set_input == ():
-            break
-        try:
-            alg_set_outer: IntervalAlgSet = IntervalAlgSet(*alg_set_input)
-            print(f"alg_set: {alg_set_outer}")
-        except Exception as err:
-            print(err)
+    pass
