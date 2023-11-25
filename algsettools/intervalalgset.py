@@ -54,6 +54,8 @@ class IntervalAlgSet(AlgSet):
         except (AlgSetError, AssertionError):
             if isinstance(item, NumericAlgExp):
                 assert not item.has_imag(), ErrorMessages.CANNOT_IMAG_IN_INTERVAL
+            elif isinstance(item, complex):
+                assert not item.imag, ErrorMessages.CANNOT_IMAG_IN_INTERVAL
             return False
         if self._lower_limit.value.real < item.value.real < self._upper_limit.value.real:
             return True
