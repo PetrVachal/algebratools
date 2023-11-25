@@ -3,7 +3,7 @@ from typing import Any, List
 
 from algebradata import AlgebraData as Ad
 from algexptools import NumericAlgExp
-from algsettools import AlgSet
+from algsettools import AlgSet, AlgSetError
 from errormessages import ErrorMessages
 
 
@@ -12,8 +12,6 @@ class DiscreteAlgSet(AlgSet):
     Contains one discrete set that contains a finite number of any NumericAlgExp instances.\n
     A call with no parameters creates an empty set.\n
     """
-    _PREFIX: str = "DiscreteAlgSet"
-    _ERR: str = f"{_PREFIX}Error: "
 
     # common variables
     _content: list = None
@@ -33,7 +31,7 @@ class DiscreteAlgSet(AlgSet):
     def __contains__(self, item):
         try:
             item = self._filter_number(item)
-        except (AssertionError, ValueError):
+        except (AlgSetError, AssertionError):
             return False
         for inner_alg_exp in self:
             if inner_alg_exp == item:
@@ -97,7 +95,7 @@ class DiscreteAlgSet(AlgSet):
         exp_not_in_set: str = ErrorMessages.replace(ErrorMessages.EXP_NOT_IN_SET, number, self)
         wanted_number_index: int = self.__first_index_of_number(number)
         if wanted_number_index == -1:
-            raise ValueError(f"{self._ERR}{exp_not_in_set}")
+            raise AlgSetError(exp_not_in_set)
         del self._content[wanted_number_index]
 
     def _correct_content(self, set_content: list) -> list:

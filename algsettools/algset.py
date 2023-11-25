@@ -2,6 +2,7 @@ from abc import ABC, abstractmethod
 from copy import deepcopy
 from typing import Any, List
 
+import algsettools
 from algexptools import AlgExp, NumericAlgExp, NumericAtomicAlgExp, NumericCompositeAlgExp
 from errormessages import ErrorMessages
 
@@ -14,8 +15,6 @@ class AlgSet(ABC):
     - IntervalAlgSet    set of all numbers between two limits (infinitely many numbers)
     - UnionAlgSet       combination of Discrete and Interval (must contain at least two subsets)
     """
-    _PREFIX: str = "AlgSet"
-    _ERR: str = f"{_PREFIX}Error: "
 
     # common variables
     _content: list | tuple = None
@@ -92,7 +91,7 @@ class AlgSet(ABC):
         ]
         self._asserts += new_asserts
         for condition, err_message in self._asserts:
-            assert condition, f"{self._ERR}{err_message}"
+            assert condition, err_message
 
     @staticmethod
     def intersect(*args):
@@ -101,7 +100,7 @@ class AlgSet(ABC):
         :param args: any instances of AlgSet
         :return: intersection of all args
         """
-        assert len(args) >= 2, f"{AlgSet._ERR}{ErrorMessages.AT_LEAST_TWO_SETS_FOR_INTERSECTION}"
+        assert len(args) >= 2, ErrorMessages.AT_LEAST_TWO_SETS_FOR_INTERSECTION
         result_set = AlgSet.__intersect(args[0], args[1])
         for actual_set in args[2:]:
             result_set = AlgSet.__intersect(result_set, actual_set)
@@ -114,7 +113,7 @@ class AlgSet(ABC):
         :param args: any instances of AlgSet
         :return: union of all args
         """
-        assert len(args) >= 2, f"{AlgSet._ERR}{ErrorMessages.AT_LEAST_TWO_SETS_FOR_UNION}"
+        assert len(args) >= 2, ErrorMessages.AT_LEAST_TWO_SETS_FOR_UNION
         result_set = AlgSet.__union(args[0], args[1])
         if len(args) > 2:
             for actual_set in args[2:]:
@@ -184,7 +183,7 @@ class AlgSet(ABC):
             case _:
                 intersection_not_recognized: str = ErrorMessages.replace(ErrorMessages.INTERSECTION_NOT_RECOGNIZED,
                                                                          interval1, interval2)
-                raise ValueError(f"{AlgSet._ERR}{intersection_not_recognized}")
+                raise algsettools.AlgSetError(intersection_not_recognized)
 
     @staticmethod
     def _include_numbers_from_discrete_set_into_intervals(alg_set: list) -> None:
@@ -459,7 +458,7 @@ class AlgSet(ABC):
             case _:
                 intersection_not_recognized: str = ErrorMessages.replace(ErrorMessages.INTERSECTION_NOT_RECOGNIZED,
                                                                          interval1, interval2)
-                raise ValueError(f"{AlgSet._ERR}{intersection_not_recognized}")
+                raise algsettools.AlgSetError(intersection_not_recognized)
 
     @staticmethod
     def __intersect_interval_union(alg_set1, alg_set2):

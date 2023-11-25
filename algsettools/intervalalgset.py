@@ -2,8 +2,8 @@ from multipledispatch import dispatch
 from typing import Any
 
 from algebradata import AlgebraData as Ad
-from algsettools import AlgSet
 from algexptools import NumericAlgExp
+from algsettools import AlgSet, AlgSetError
 from errormessages import ErrorMessages
 
 
@@ -15,8 +15,6 @@ class IntervalAlgSet(AlgSet):
     Interval is closed from the right <=> is_right_closed = True\n
     A call with no parameters creates interval (-inf, inf).\n
     """
-    _PREFIX: str = "IntervalAlgSet"
-    _ERR: str = f"{_PREFIX}Error: "
 
     # common variables
     _content: tuple = None
@@ -53,9 +51,9 @@ class IntervalAlgSet(AlgSet):
     def __contains__(self, item):
         try:
             item = self._filter_number(item)
-        except (AssertionError, ValueError):
+        except (AlgSetError, AssertionError):
             if isinstance(item, NumericAlgExp):
-                assert not item.has_imag(), f"{self._ERR}{ErrorMessages.CANNOT_IMAG_IN_INTERVAL}"
+                assert not item.has_imag(), ErrorMessages.CANNOT_IMAG_IN_INTERVAL
             return False
         if self._lower_limit.value.real < item.value.real < self._upper_limit.value.real:
             return True
@@ -122,14 +120,14 @@ class IntervalAlgSet(AlgSet):
         return not self._is_right_closed
 
     def _correct_content(self, set_content: tuple) -> tuple:
-        assert len(set_content) == 2, f"{self._ERR}{ErrorMessages.LEN_INTERVAL_MUST_BE_2}"
+        assert len(set_content) == 2, ErrorMessages.LEN_INTERVAL_MUST_BE_2
         set_content = tuple(self._filter_number(number) for number in set_content)
         wrong_numbers_ordering: str = ErrorMessages.replace(ErrorMessages.WRONG_NUMBERS_ORDERING_INTERVAL,
                                                             str(set_content))
         must_be_closed: str = ErrorMessages.replace(ErrorMessages.INTERVAL_MUST_BE_CLOSED, str(set_content))
-        assert set_content[0].value.real <= set_content[1].value.real, f"{self._ERR}{wrong_numbers_ordering}"
+        assert set_content[0].value.real <= set_content[1].value.real, wrong_numbers_ordering
         if set_content[0].value.real == set_content[1].value.real:
-            assert self.is_closed(), f"{self._ERR}{must_be_closed}"
+            assert self.is_closed(), must_be_closed
         return set_content
 
     def _create_content(self, alg_set: Any) -> None:
@@ -145,9 +143,9 @@ class IntervalAlgSet(AlgSet):
 
     def _filter_number(self, number: Any) -> NumericAlgExp:
         number = super()._filter_number(number)
-        assert self.has_no_limits() or not number.has_imag(), f"{self._ERR}{ErrorMessages.CANNOT_IMAG_IN_INTERVAL}"
+        assert self.has_no_limits() or not number.has_imag(), ErrorMessages.CANNOT_IMAG_IN_INTERVAL
         real_value: float = number.value.real
-        assert real_value < 0 or real_value >= 0, f"{self._ERR}{ErrorMessages.CANNOT_NAN_IN_INTERVAL}"
+        assert real_value < 0 or real_value >= 0, ErrorMessages.CANNOT_NAN_IN_INTERVAL
         return number
 
     def _init_check(self, alg_set: Any) -> None:

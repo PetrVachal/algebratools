@@ -10,8 +10,6 @@ class UnionAlgSet(AlgSet):
     """
     Contains a set that is composed of at least two disjoint sets.
     """
-    _PREFIX: str = "UnionAlgSet"
-    _ERR: str = f"{_PREFIX}Error: "
 
     _content: list = None
 
@@ -71,15 +69,15 @@ class UnionAlgSet(AlgSet):
         set_content = list(set_content)
         self._single_digit_intervals_to_discrete_sets(set_content)
         assert any(isinstance(inner_set, IntervalAlgSet) for inner_set in
-                   set_content), f"{self._ERR}{ErrorMessages.UNION_MUST_CONTAIN_INTERVAL}"
+                   set_content), ErrorMessages.UNION_MUST_CONTAIN_INTERVAL
         self.__simplify_discrete_sets_content(set_content)
-        assert len(set_content) > 1, f"{self._ERR}{ErrorMessages.AT_LEAST_TWO_SETS_IN_UNION}"
+        assert len(set_content) > 1, ErrorMessages.AT_LEAST_TWO_SETS_IN_UNION
         self._include_numbers_from_discrete_set_into_intervals(set_content)
-        assert len(set_content) > 1, f"{self._ERR}{ErrorMessages.AT_LEAST_TWO_SETS_IN_UNION}"
+        assert len(set_content) > 1, ErrorMessages.AT_LEAST_TWO_SETS_IN_UNION
         # discrete sets processed
         self.__unite_closed_limits(set_content)
         self.__simplify_intervals_content(set_content)
-        assert len(set_content) > 1, f"{self._ERR}{ErrorMessages.AT_LEAST_TWO_SETS_IN_UNION}"
+        assert len(set_content) > 1, ErrorMessages.AT_LEAST_TWO_SETS_IN_UNION
         return set_content
 
     def _create_content(self, alg_set: Any) -> None:
@@ -92,7 +90,7 @@ class UnionAlgSet(AlgSet):
         self._allowed_types = (list,)
         self._asserts = [
             (isinstance(alg_set, self.__class__) or (isinstance(alg_set, (list, tuple)) and len(alg_set) > 1),
-             f"{self._ERR}{ErrorMessages.AT_LEAST_TWO_SETS_IN_UNION}")
+             ErrorMessages.AT_LEAST_TWO_SETS_IN_UNION)
         ]
         super()._init_check(alg_set)
 
