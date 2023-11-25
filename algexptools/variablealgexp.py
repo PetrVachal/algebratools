@@ -1,5 +1,5 @@
 from abc import ABC, abstractmethod
-from copy import copy, deepcopy
+from copy import copy
 from functools import singledispatchmethod
 from typing import Any, List, Tuple
 
@@ -18,7 +18,6 @@ class VariableAlgExp(AlgExp, ABC):
     _ERR: str = f"{_PREFIX}Error: "
 
     # common variables
-    _immutable_contents: dict = None
     _variables: list = None
     _variables_domains: dict = None
 
@@ -28,7 +27,6 @@ class VariableAlgExp(AlgExp, ABC):
             self.__create_variables_domains(expression)
         else:
             self.__create_variables_domains(variables_domains)
-        self.__create_immutable_contents(expression)
 
     @property
     def variables(self):
@@ -92,9 +90,9 @@ class VariableAlgExp(AlgExp, ABC):
             1) it is possible to create NumericAlgExp instance from number
             --
             2) number is in variable domain of the variable
-            for which is substituted
+               for which is substituted
             --
-            3) variable exist in self-expression
+            3) variable exists in self-expression
         Throws exception if point 1 is false or point 2 is false.
         Returns True if point 3 is true, otherwise returns False.
         :param variable: any VariableAtomicAlgExp instance or string content of this
@@ -161,18 +159,6 @@ class VariableAlgExp(AlgExp, ABC):
             if not found:
                 new_variables_domains[variable_from_all] = IntervalAlgSet()
         return new_variables_domains
-
-    def __create_immutable_contents(self, expression: Any) -> None:
-        """
-        Creates substitution dictionary named as immutable_contents for all immutable
-        contents of expression and stores this dictionary in self variable.
-        :param expression: any algebraic expression
-        :return: None
-        """
-        if isinstance(expression, VariableAlgExp):
-            self._immutable_contents = deepcopy(expression._immutable_contents)
-            return
-        self._immutable_contents = deepcopy(self.__found_and_get_immutable_contents(expression))
 
     @singledispatchmethod
     def __create_variables_domains(self, something):
@@ -303,7 +289,7 @@ class VariableAlgExp(AlgExp, ABC):
         Substitutes all immutable areas in expression.
         :param expression: any algebraic expression
         :param immutable_contents: all immutable contents of expression
-        :param reverse: flag for reverse substitution
+        :param reverse: flag for reverse substitution [False]
         :return: expression with substituted immutable areas
         """
         left_imm_br, right_imm_br = Ad.LEFT_IMMUTABLE_BRACKET, Ad.RIGHT_IMMUTABLE_BRACKET

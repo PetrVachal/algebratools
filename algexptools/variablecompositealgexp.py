@@ -164,8 +164,6 @@ class VariableCompositeAlgExp(VariableAlgExp, CompositeAlgExp):
             alg_exp.content[substitution_index] = substitutions[substitution_index]
         for variable_to_substitution in substitution_dict:
             if variable_to_substitution in alg_exp.variables:
-                if variable_to_substitution.is_immutable_content():
-                    del alg_exp._immutable_contents[variable_to_substitution.content[1:-1]]
                 del alg_exp.variables_domains[variable_to_substitution]
                 alg_exp.variables.remove(variable_to_substitution)
         if not alg_exp.variables:
