@@ -4,7 +4,7 @@ from functools import singledispatchmethod
 from typing import Any, List, Tuple
 
 from algebradata import AlgebraData as Ad
-from algexptools import AlgExp
+from algexptools import AlgExp, AlgExpError
 from errormessages import ErrorMessages
 
 
@@ -14,8 +14,6 @@ class VariableAlgExp(AlgExp, ABC):
     - VariableAtomicAlgExp       variable expression without operations
     - VariableCompositeAlgExp    variable expression with operations
     """
-    _PREFIX: str = "VariableAlgExp"
-    _ERR: str = f"{_PREFIX}Error: "
 
     # common variables
     _variables: list = None
@@ -106,8 +104,8 @@ class VariableAlgExp(AlgExp, ABC):
         if not isinstance(exp_number, (NumericAtomicAlgExp, NumericCompositeAlgExp)):
             try:
                 exp_number = AlgExp.initializer(number, NumericAtomicAlgExp, NumericCompositeAlgExp)
-            except (AssertionError, ValueError):
-                raise ValueError(f"{self._ERR}{number_must_be_instance}")
+            except (AlgExpError, AssertionError):
+                raise AlgExpError(number_must_be_instance)
         # exp_number is an instance of NumericAlgExp
         if (isinstance(variable, VariableAlgExp) and variable not in self._variables) or variable not in self:
             return False
@@ -117,8 +115,7 @@ class VariableAlgExp(AlgExp, ABC):
         number_is_not_in_variables_domains: str = ErrorMessages.replace(
             ErrorMessages.NUMBER_IS_NOT_IN_VARIABLE_DOMAIN, exp_number, self._variables_domains[instance_variable],
             self)
-        assert exp_number in self._variables_domains[
-            instance_variable], f"{self._ERR}{number_is_not_in_variables_domains}"
+        assert exp_number in self._variables_domains[instance_variable], number_is_not_in_variables_domains
         return True
 
     def _variable_by_content(self, content: str):
@@ -241,7 +238,7 @@ class VariableAlgExp(AlgExp, ABC):
                 if start_index == -1:
                     is_not_variable: str = ErrorMessages.replace(ErrorMessages.IS_NOT_EXP, expression,
                                                                  VariableAlgExp.__name__)
-                    raise ValueError(f"{self._ERR}{is_not_variable}")
+                    raise AlgExpError(is_not_variable)
                 if start_index <= end_index:
                     areas.append((start_index, end_index))
                 is_deep_level = False
@@ -260,10 +257,10 @@ class VariableAlgExp(AlgExp, ABC):
         must_be_instance: str = ErrorMessages.replace(ErrorMessages.MUST_BE_INSTANCE, "Variable domain",
                                                       AlgSet.__name__)
         for variable, alg_set in variables_domains.items():
-            assert isinstance(alg_set, AlgSet), f"{self._ERR}{must_be_instance}"
+            assert isinstance(alg_set, AlgSet), must_be_instance
             if isinstance(alg_set, DiscreteAlgSet):
                 var_has_empty_domain: str = ErrorMessages.replace(ErrorMessages.VAR_HAS_EMPTY_SET_DOMAIN, variable)
-                assert not alg_set.is_empty(), f"{self._ERR}{var_has_empty_domain}"
+                assert not alg_set.is_empty(), var_has_empty_domain
 
     def __refresh_variables_domains(self, alg_exp) -> None:
         """

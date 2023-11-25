@@ -3,8 +3,8 @@ from typing import Any, List, Tuple
 import re
 
 from algebradata import AlgebraData as Ad
-from algexptools import AlgExp, CompositeAlgExp, NumericAtomicAlgExp, NumericCompositeAlgExp, VariableAlgExp, \
-    VariableAtomicAlgExp
+from algexptools import AlgExp, AlgExpError, CompositeAlgExp, NumericAtomicAlgExp, NumericCompositeAlgExp, \
+    VariableAlgExp, VariableAtomicAlgExp
 from errormessages import ErrorMessages
 from patterns import Patterns
 
@@ -13,9 +13,6 @@ class VariableCompositeAlgExp(VariableAlgExp, CompositeAlgExp):
     """
     Contains variable with at least one operation.
     """
-
-    _PREFIX: str = "VariableCompositeAlgExp"
-    _ERR: str = f"{_PREFIX}Error: "
 
     # other variables
     _allowed_content_pattern = re.compile(Patterns.ALLOWED_VARIABLE_COMPOSITE_CONTENT)
@@ -74,9 +71,9 @@ class VariableCompositeAlgExp(VariableAlgExp, CompositeAlgExp):
                     start_index = actual_index + 1
                 break
         if operator_for_split == "":
-            raise ValueError(f"{self._ERR}{is_not_composite}")
+            raise AlgExpError(is_not_composite)
         if not contains_variable:
-            raise ValueError(f"{self._ERR}{ErrorMessages.MUST_CONTAIN_VARIABLE}")
+            raise AlgExpError(ErrorMessages.MUST_CONTAIN_VARIABLE)
         self._operator = operator_for_split
         variables_contents: list = VariableAlgExp._found_and_get_all_variables_contents(expression_parts)
         self._variables = [VariableAtomicAlgExp(exp) for exp in variables_contents]
@@ -92,7 +89,7 @@ class VariableCompositeAlgExp(VariableAlgExp, CompositeAlgExp):
         is_variable_exp: bool = False
         try:
             AlgExp.initializer(expression, NumericAtomicAlgExp, NumericCompositeAlgExp, VariableAtomicAlgExp)
-        except ValueError:
+        except AlgExpError:
             is_variable_exp = True
         self._allowed_types = {}
         self._asserts = [
@@ -181,5 +178,5 @@ if __name__ == '__main__':
             print(f"exp: {alg_exp_outer}")
             print(f"variables: {alg_exp_outer.variables}")
             print(f"variables_domains: {alg_exp_outer.variables_domains}")
-        except Exception as err_outer:
+        except (AlgExpError, AssertionError) as err_outer:
             print(err_outer)

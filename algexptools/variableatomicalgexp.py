@@ -1,6 +1,7 @@
 from typing import Any
 import re
 
+import algexptools
 from algebradata import AlgebraData as Ad
 from algexptools import AlgExp, AtomicAlgExp, VariableAlgExp
 from errormessages import ErrorMessages
@@ -11,9 +12,6 @@ class VariableAtomicAlgExp(VariableAlgExp, AtomicAlgExp):
     """
     Contains variable without any operations.
     """
-
-    _PREFIX: str = "VariableAtomicAlgExp"
-    _ERR: str = f"{_PREFIX}Error: "
 
     # other variables
     _allowed_content_pattern = re.compile(Patterns.ALLOWED_SIMPLE_VARIABLE_ATOMIC_CONTENT)
@@ -40,9 +38,9 @@ class VariableAtomicAlgExp(VariableAlgExp, AtomicAlgExp):
         is_not_atomic: str = ErrorMessages.replace(ErrorMessages.IS_NOT_EXP, expression, AtomicAlgExp.__name__)
         corrected_expression: str = self._correction(expression)
         assert not corrected_expression.startswith(
-            f"{Ad.MINUS}{left_imm_br}"), f"{self._ERR}{ErrorMessages.MUST_BE_ATOMIC_VARIABLE}"
+            f"{Ad.MINUS}{left_imm_br}"), ErrorMessages.MUST_BE_ATOMIC_VARIABLE
         assert self._is_wrapped_in_brackets(corrected_expression, left_imm_br, right_imm_br) or re.search(
-            self._allowed_content_pattern, corrected_expression), f"{self._ERR}{is_not_atomic}"
+            self._allowed_content_pattern, corrected_expression), is_not_atomic
         self._variables = [self]
         self._content = corrected_expression
 
@@ -67,5 +65,5 @@ if __name__ == '__main__':
             print(f"exp: {alg_exp_outer}")
             print(f"variables: {alg_exp_outer.variables}")
             print(f"variables_domains: {alg_exp_outer.variables_domains}")
-        except Exception as err:
+        except (algexptools.AlgExpError, AssertionError) as err:
             print(err)

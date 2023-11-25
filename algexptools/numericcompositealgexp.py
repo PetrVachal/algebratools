@@ -4,7 +4,7 @@ import re
 
 from algebradata import AlgebraData as Ad
 from errormessages import ErrorMessages
-from algexptools import AlgExp, AtomicAlgExp, CompositeAlgExp, NumericAlgExp, NumericAtomicAlgExp
+from algexptools import AlgExp, AlgExpError, AtomicAlgExp, CompositeAlgExp, NumericAlgExp, NumericAtomicAlgExp
 from patterns import Patterns
 
 
@@ -14,8 +14,6 @@ class NumericCompositeAlgExp(NumericAlgExp, CompositeAlgExp):
         1) without variables
         2) with at least one operation
     """
-    _PREFIX: str = "NumericCompositeAlgExp"
-    _ERR: str = f"{_PREFIX}Error: "
 
     # other variables
     _allowed_content_pattern = re.compile(Patterns.ALLOWED_NUMERIC_COMPOSITE_CONTENT)
@@ -46,7 +44,7 @@ class NumericCompositeAlgExp(NumericAlgExp, CompositeAlgExp):
                 result: complex = self._content[0].value
                 for inner_alg_exp in self._content[1:]:
                     if inner_alg_exp.value == 0:
-                        raise ZeroDivisionError(f"{self._ERR}: {ErrorMessages.CANNOT_DIV_BY_ZERO}")
+                        raise AlgExpError(ErrorMessages.CANNOT_DIV_BY_ZERO)
                     result /= inner_alg_exp.value
             case Ad.POWER:
                 result: complex = complex(1, 0)
@@ -59,13 +57,13 @@ class NumericCompositeAlgExp(NumericAlgExp, CompositeAlgExp):
             case _:
                 cannot_compute_value: str = ErrorMessages.replace(ErrorMessages.CANNOT_COMPUTE_VALUE_UNKNOWN_OPERATOR,
                                                                   self._operator)
-                raise ValueError(f"{self._ERR}{cannot_compute_value}")
+                raise AlgExpError(cannot_compute_value)
         return complex(result)
 
     def is_natural(self) -> bool:
         if self._simplified:
             return False
-        raise ValueError(f"{self._ERR}{self.__cannot_determine_domain}")
+        raise AlgExpError(self.__cannot_determine_domain)
 
     def is_integer(self) -> bool:
         return self.is_natural()
@@ -74,19 +72,19 @@ class NumericCompositeAlgExp(NumericAlgExp, CompositeAlgExp):
         if self.has_imag():
             if self._simplified:
                 return False
-            raise ValueError(f"{self._ERR}{self.__cannot_determine_domain}")
+            raise AlgExpError(self.__cannot_determine_domain)
         if all((len(self._content) == 2, self._operator == Ad.DIV, isinstance(self._content[0], AtomicAlgExp),
                 isinstance(self._content[1], AtomicAlgExp))):
             return True
         if self._simplified:
             return False
-        raise ValueError(f"{self._ERR}{self.__cannot_determine_domain}")
+        raise AlgExpError(self.__cannot_determine_domain)
 
     def is_real(self) -> bool:
         if self.has_imag():
             if self._simplified:
                 return False
-            raise ValueError(f"{self._ERR}{self.__cannot_determine_domain}")
+            raise AlgExpError(self.__cannot_determine_domain)
         return True
 
     def is_complex(self) -> bool:
@@ -114,7 +112,7 @@ class NumericCompositeAlgExp(NumericAlgExp, CompositeAlgExp):
                     start_index = actual_index + 1
                 break
         if operator_for_split == "":
-            raise ValueError(f"{self._ERR}{is_not_composite}")
+            raise AlgExpError(is_not_composite)
         self._operator = operator_for_split
         return expression_parts
 
@@ -187,5 +185,5 @@ if __name__ == '__main__':
             alg_exp: NumericCompositeAlgExp = NumericCompositeAlgExp(alg_exp_input)
             print(f"exp: {alg_exp}")
             print(f"value: {alg_exp.value}")
-        except Exception as err:
+        except (AlgExpError, AssertionError) as err:
             print(err)

@@ -3,6 +3,7 @@ from inspect import isabstract
 import re
 from typing import Any, Tuple
 
+import algexptools
 from algebradata import AlgebraData as Ad
 from errormessages import ErrorMessages
 from patterns import Patterns
@@ -17,8 +18,6 @@ class AlgExp(ABC):
     - VariableAtomicAlgExp    variable expression without operations
     - VariableCompositeAlgExp variable expression with operations
     """
-    _PREFIX: str = "AlgExp"
-    _ERR: str = f"{_PREFIX}Error: "
 
     # common variables
     _content: list | str = None
@@ -66,7 +65,7 @@ class AlgExp(ABC):
 
     def __contains__(self, item):
         from algexptools import AtomicAlgExp
-        assert isinstance(item, (int, str, AtomicAlgExp)), f"{self._ERR}{ErrorMessages.TYPE_FOR_ITEM_IN_CONTAINS}"
+        assert isinstance(item, (int, str, AtomicAlgExp)), ErrorMessages.TYPE_FOR_ITEM_IN_CONTAINS
 
     def __mul__(self, other):
         return self.__magic_operation_method_result(other, Ad.MULTIPLY)
@@ -145,7 +144,7 @@ class AlgExp(ABC):
         """
         must_be_instance: str = ErrorMessages.replace(ErrorMessages.MUST_BE_INSTANCE, "Expression",
                                                       self.__class__.__name__)
-        assert isinstance(expression, self.__class__), f"{self._ERR}{must_be_instance}"
+        assert isinstance(expression, self.__class__), must_be_instance
         self._content = expression.content[:]
 
     def _init_check(self, expression: Any, variables_domains: dict = None) -> None:
@@ -168,7 +167,7 @@ class AlgExp(ABC):
         ]
         self._asserts += new_asserts
         for condition, err_message in self._asserts:
-            assert condition, f"{self._ERR}{err_message}"
+            assert condition, err_message
 
     def _is_wrapped_in_brackets(self, expression: str, left_br: str = Ad.LEFT_BRACKET,
                                 right_br: str = Ad.RIGHT_BRACKET) -> bool:
@@ -290,10 +289,10 @@ class AlgExp(ABC):
         for actual_class in classes_for_init:
             try:
                 return actual_class(expression)
-            except (AssertionError, ValueError):
+            except (algexptools.AlgExpError, AssertionError):
                 pass
         is_not_alg_exp: str = ErrorMessages.replace(ErrorMessages.IS_NOT_EXP, expression, AlgExp.__name__)
-        raise ValueError(f"{AlgExp._ERR}{is_not_alg_exp}")
+        raise algexptools.AlgExpError(is_not_alg_exp)
 
     @staticmethod
     def _bracketing(expression: str, analyzed_brackets: list = None) -> list:

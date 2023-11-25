@@ -1,4 +1,5 @@
 from .algexp import AlgExp
+from .algexperror import AlgExpError
 from .atomicalgexp import AtomicAlgExp
 from .compositealgexp import CompositeAlgExp
 from .numericalgexp import NumericAlgExp

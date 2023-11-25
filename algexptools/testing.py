@@ -1,4 +1,4 @@
-from algexptools import AlgExp, NumericAlgExp, VariableAlgExp
+from algexptools import AlgExp, AlgExpError, NumericAlgExp, VariableAlgExp
 
 if __name__ == '__main__':
     while True:
@@ -14,5 +14,5 @@ if __name__ == '__main__':
             elif isinstance(alg_exp, VariableAlgExp):
                 print(f"variables: {alg_exp.variables}")
                 print(f"variables_domains: {alg_exp.variables_domains}")
-        except (AssertionError, ValueError) as err:
+        except (AlgExpError, AssertionError) as err:
             print(err)

@@ -2,7 +2,7 @@ from abc import ABC, abstractmethod
 import re
 
 from algebradata import AlgebraData as Ad
-from algexptools import AlgExp
+from algexptools import AlgExp, AlgExpError
 from errormessages import ErrorMessages
 from patterns import Patterns
 
@@ -13,8 +13,6 @@ class CompositeAlgExp(AlgExp, ABC):
     - NumericCompositeAlgExp   complex number with operations
     - VariableCompositeAlgExp  variables with operations
     """
-    _PREFIX: str = "CompositeAlgExp"
-    _ERR: str = f"{_PREFIX}Error: "
 
     # common variables
     _content: list = None
@@ -84,7 +82,7 @@ class CompositeAlgExp(AlgExp, ABC):
         """
         for inner_alg_exp in self._content[1:]:
             if self._operator == Ad.DIV and inner_alg_exp.content == "0":
-                raise ZeroDivisionError(f"{self._ERR}: {ErrorMessages.CANNOT_DIV_BY_ZERO}")
+                raise AlgExpError(ErrorMessages.CANNOT_DIV_BY_ZERO)
             if isinstance(inner_alg_exp, CompositeAlgExp):
                 inner_alg_exp._check_content()
 

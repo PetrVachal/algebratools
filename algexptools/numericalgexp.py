@@ -10,8 +10,6 @@ class NumericAlgExp(AlgExp, ABC):
     - NumericAtomicAlgExp       numeric expression without operations
     - NumericCompositeAlgExp    numeric expression with operations
     """
-    _PREFIX: str = "NumericAlgExp"
-    _ERR: str = f"{_PREFIX}Error: "
 
     def __init__(self, expression: Any):
         super().__init__(expression)

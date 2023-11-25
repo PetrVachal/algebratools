@@ -12,8 +12,6 @@ class AtomicAlgExp(AlgExp, ABC):
     - NumericAtomicAlgExp   complex number without operations
     - VariableAtomicAlgExp  variable without operations
     """
-    _PREFIX: str = "AtomicAlgExp"
-    _ERR: str = f"{_PREFIX}Error: "
 
     # common variables
     _content: str = None
@@ -22,7 +20,6 @@ class AtomicAlgExp(AlgExp, ABC):
         super().__init__(expression)
 
     def __contains__(self, item):
-        from algexptools import VariableAtomicAlgExp
         super().__contains__(item)
         string_item: str = str(item)
         if self._content == string_item:

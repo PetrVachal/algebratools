@@ -1,6 +1,7 @@
 from typing import Any
 import re
 
+import algexptools
 from algebradata import AlgebraData as Ad
 from errormessages import ErrorMessages
 from algexptools import AtomicAlgExp, NumericAlgExp
@@ -11,9 +12,6 @@ class NumericAtomicAlgExp(NumericAlgExp, AtomicAlgExp):
     """
     Contains a real number without any operations or 'i' / '-i'.
     """
-
-    _PREFIX: str = "NumericAtomicAlgExp"
-    _ERR: str = f"{_PREFIX}Error: "
 
     # other variables
     _allowed_content_pattern = re.compile(Patterns.ALLOWED_NUMERIC_ATOMIC_CONTENT)
@@ -46,11 +44,11 @@ class NumericAtomicAlgExp(NumericAlgExp, AtomicAlgExp):
 
     def _create_content_from_complex(self, expression: complex) -> None:
         is_not_atomic: str = ErrorMessages.replace(ErrorMessages.IS_NOT_EXP, expression, AtomicAlgExp.__name__)
-        assert expression.real == 0 or expression.imag == 0, f"{self._ERR}{is_not_atomic}"
+        assert expression.real == 0 or expression.imag == 0, is_not_atomic
         if expression.real:  # further, the creation is delegated to the float method
             self._create_content_from_float(expression.real)
         else:  # multiple of imag unit must be -1, 0 or 1
-            assert expression.imag in (-1, 0, 1), f"{self._ERR}{is_not_atomic}"
+            assert expression.imag in (-1, 0, 1), is_not_atomic
             match expression.imag:
                 case -1:
                     self._content = f"{Ad.MINUS}{Ad.IMAG_UNIT}"
@@ -65,13 +63,13 @@ class NumericAtomicAlgExp(NumericAlgExp, AtomicAlgExp):
             if str(expression) in (special_string, f"{Ad.MINUS}{special_string}"):
                 self._content = str(expression)
                 return
-        assert expression % 1 == 0, f"{self._ERR}{is_not_atomic}"  # expression must be an integer
+        assert expression % 1 == 0, is_not_atomic  # expression must be an integer
         self._content = str(expression)[:-2]
 
     def _create_content_from_str(self, expression: str) -> None:
         corrected_expression: str = self._correction(expression)
         is_not_atomic: str = ErrorMessages.replace(ErrorMessages.IS_NOT_EXP, expression, AtomicAlgExp.__name__)
-        assert re.search(self._allowed_content_pattern, corrected_expression), f"{self._ERR}{is_not_atomic}"
+        assert re.search(self._allowed_content_pattern, corrected_expression), is_not_atomic
         if re.search(Patterns.FLOAT_NUMBER, corrected_expression):
             self._create_content_from_float(float(corrected_expression))
         else:
@@ -125,5 +123,5 @@ if __name__ == '__main__':
             alg_exp: NumericAtomicAlgExp = NumericAtomicAlgExp(alg_exp_input)
             print(f"exp: {alg_exp}")
             print(f"value: {alg_exp.value}")
-        except Exception as err:
+        except (algexptools.AlgExpError, AssertionError) as err:
             print(err)
