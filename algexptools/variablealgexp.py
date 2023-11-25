@@ -245,23 +245,6 @@ class VariableAlgExp(AlgExp, ABC):
                 continue
         return areas
 
-    def __check_variables_domains(self, variables_domains: dict) -> None:
-        """
-        Checks if all variables domains are instances of AlgSet.
-        Further, checks whether any set from variable domains is not an empty set.
-        If such a set is found, it throws an exception.
-        :param variables_domains: variable domains for all variables in expression
-        :return: None
-        """
-        from algsettools import AlgSet, DiscreteAlgSet
-        must_be_instance: str = ErrorMessages.replace(ErrorMessages.MUST_BE_INSTANCE, "Variable domain",
-                                                      AlgSet.__name__)
-        for variable, alg_set in variables_domains.items():
-            assert isinstance(alg_set, AlgSet), must_be_instance
-            if isinstance(alg_set, DiscreteAlgSet):
-                var_has_empty_domain: str = ErrorMessages.replace(ErrorMessages.VAR_HAS_EMPTY_SET_DOMAIN, variable)
-                assert not alg_set.is_empty(), var_has_empty_domain
-
     def __refresh_variables_domains(self, alg_exp) -> None:
         """
         Refreshes variables domains in all inner expressions in alg_exp,
@@ -311,3 +294,21 @@ class VariableAlgExp(AlgExp, ABC):
             if isinstance(inner_alg_exp, VariableAlgExp):
                 variables += VariableAlgExp._found_and_get_all_variables_contents(inner_alg_exp.content)
         return list(set(variables))
+
+    @staticmethod
+    def __check_variables_domains(variables_domains: dict) -> None:
+        """
+        Checks if all variables domains are instances of AlgSet.
+        Further, checks whether any set from variable domains is not an empty set.
+        If such a set is found, it throws an exception.
+        :param variables_domains: variable domains for all variables in expression
+        :return: None
+        """
+        from algsettools import AlgSet, DiscreteAlgSet
+        must_be_instance: str = ErrorMessages.replace(ErrorMessages.MUST_BE_INSTANCE, "Variable domain",
+                                                      AlgSet.__name__)
+        for variable, alg_set in variables_domains.items():
+            assert isinstance(alg_set, AlgSet), must_be_instance
+            if isinstance(alg_set, DiscreteAlgSet):
+                var_has_empty_domain: str = ErrorMessages.replace(ErrorMessages.VAR_HAS_EMPTY_SET_DOMAIN, variable)
+                assert not alg_set.is_empty(), var_has_empty_domain
