@@ -21,6 +21,7 @@ class ErrorMessages:
     MUST_BE_INSTANCE: str = f"{__sub_chr}1 must be instance of {__sub_chr}2"
     MUST_BE_INTEGER: str = "Number for substitution must be an integer"
     MUST_CONTAIN_VARIABLE: str = "VariableComposite expression must contain any variable"
+    NUMBER_IS_NOT_IN_VARIABLE_DOMAIN: str = f"Number {__sub_chr}1 is not in variable domain {__sub_chr}2 of expression '{__sub_chr}3'"
     TYPE_FOR_ITEM_IN_CONTAINS: str = "item must be instance of int or str"
     UNION_MUST_CONTAIN_INTERVAL: str = "UnionAlgSet must contain any interval"
     VAR_HAS_EMPTY_SET_DOMAIN: str = f"Domain of a variable '{__sub_chr}1' is an empty set"

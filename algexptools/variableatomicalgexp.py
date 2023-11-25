@@ -2,7 +2,7 @@ from typing import Any
 import re
 
 from algebradata import AlgebraData as Ad
-from algexptools import AtomicAlgExp, VariableAlgExp
+from algexptools import AlgExp, AtomicAlgExp, VariableAlgExp
 from errormessages import ErrorMessages
 from patterns import Patterns
 
@@ -21,6 +21,19 @@ class VariableAtomicAlgExp(VariableAlgExp, AtomicAlgExp):
     def __init__(self, expression: Any, variables_domains: dict = None):
         self._correction_methods = ()
         VariableAlgExp.__init__(self, expression, variables_domains)
+
+    def is_immutable_content(self):
+        return self._is_wrapped_in_brackets(self._content, Ad.LEFT_IMMUTABLE_BRACKET, Ad.RIGHT_IMMUTABLE_BRACKET)
+
+    def substitute(self, number: Any):
+        """
+        Returns new NumericAlgExp instance of given number
+        :param number: any number for NumericAlgExp initialization
+        :return: see doc
+        """
+        from algexptools import NumericAtomicAlgExp, NumericCompositeAlgExp
+        self._substitute_check(self._variables[0], number)
+        return AlgExp.initializer(number, NumericAtomicAlgExp, NumericCompositeAlgExp)
 
     def _create_content_from_str(self, expression: str) -> None:
         left_imm_br, right_imm_br = Ad.LEFT_IMMUTABLE_BRACKET, Ad.RIGHT_IMMUTABLE_BRACKET
@@ -42,15 +55,6 @@ class VariableAtomicAlgExp(VariableAlgExp, AtomicAlgExp):
                 ErrorMessages.MUST_BE_ATOMIC_VARIABLE)
         ]
         super()._init_check(expression)
-
-    @staticmethod
-    def _substitute(alg_exp, variable: str, number: Any):
-        super()._substitute(alg_exp, variable, number)
-        number_string: str = str(number)
-        if isinstance(alg_exp, VariableAtomicAlgExp):
-            if alg_exp._content == variable:
-                alg_exp._content = number_string
-        return alg_exp
 
 
 if __name__ == '__main__':

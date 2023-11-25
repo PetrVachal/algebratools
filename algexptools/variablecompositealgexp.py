@@ -24,6 +24,26 @@ class VariableCompositeAlgExp(VariableAlgExp, CompositeAlgExp):
         self._correction_methods = (self._add_multiply_operators, self._replace_minuses)
         VariableAlgExp.__init__(self, expression, variables_domains)
 
+    def substitute(self, substitution_dict: dict):
+        """
+        Returns new substituted CompositeAlgExp instance where substitution is
+        determined using substitution_dict.
+        substitution_dict = {variable: number} where we want to substitute this variable
+                            for this number in all occurrences of self-expression
+        If all variables contained in self-expression are substituted,
+        the method returns NumericComposite instance.
+        :param substitution_dict: dictionary for substitution
+        :return: new substituted instance of CompositeAlgExp
+        """
+        new_instance = AlgExp.initializer(self)
+        corrected_substitution_dict: dict = {}
+        for variable, number in substitution_dict.items():
+            if new_instance._substitute_check(variable, number):
+                corrected_substitution_dict[new_instance._variable_by_content(str(variable))] = \
+                    AlgExp.initializer(number, NumericAtomicAlgExp, NumericCompositeAlgExp)
+        # everything is ok for substitution
+        return new_instance.__substitute(new_instance, corrected_substitution_dict)
+
     def _alg_exp_structure(self, expression: str) -> list:
         from algexptools import VariableAlgExp
         stack_functions: list = [stack_info.function for stack_info in stack()]
@@ -121,15 +141,35 @@ class VariableCompositeAlgExp(VariableAlgExp, CompositeAlgExp):
             pre_content[target_index] = substitution_dict[target_index]
 
     @staticmethod
-    def _substitute(alg_exp, variable: str, number: Any):
-        super()._substitute(alg_exp, variable, number)
-        number_string: str = str(number)
-        assert re.search(rf"{Ad.MINUS}?\d+", number_string), f"{AlgExp._ERR}{ErrorMessages.MUST_BE_INTEGER}"
-        if isinstance(alg_exp, VariableCompositeAlgExp):
-            for inner_exp in alg_exp.content:
-                if isinstance(inner_exp, VariableAlgExp):
-                    changed_inner_exp = type(inner_exp)._substitute(inner_exp, variable, number_string)
-                    inner_exp._content = changed_inner_exp.content
+    def __substitute(alg_exp, substitution_dict: dict):
+        """
+        Method for the dirtiest substitution work.
+        The work of this method is the recursive substitution of all variables
+        for numbers according to substitution_dict.
+        Including substitution also recursively removes all variable information
+        stored in alg_exp.
+        :param alg_exp: any instance of VariableCompositeAlgExp
+        :param substitution_dict: dictionary for substitution
+        :return:
+        """
+        from algexptools import VariableCompositeAlgExp
+        substitutions: dict = {}
+        for i, inner_exp in enumerate(alg_exp.content):
+            if isinstance(inner_exp, VariableAlgExp):
+                if isinstance(inner_exp, VariableCompositeAlgExp):
+                    VariableCompositeAlgExp.__substitute(inner_exp, substitution_dict)
+                if inner_exp in substitution_dict:  # this is our VariableAtomic instance for substitution
+                    substitutions[i] = substitution_dict[inner_exp]
+        for substitution_index in substitutions:
+            alg_exp.content[substitution_index] = substitutions[substitution_index]
+        for variable_to_substitution in substitution_dict:
+            if variable_to_substitution in alg_exp.variables:
+                if variable_to_substitution.is_immutable_content():
+                    del alg_exp._immutable_contents[variable_to_substitution.content[1:-1]]
+                del alg_exp.variables_domains[variable_to_substitution]
+                alg_exp.variables.remove(variable_to_substitution)
+        if not alg_exp.variables:
+            return AlgExp.initializer(str(alg_exp), NumericAtomicAlgExp, NumericCompositeAlgExp)
         return alg_exp
 
 
@@ -143,5 +183,5 @@ if __name__ == '__main__':
             print(f"exp: {alg_exp_outer}")
             print(f"variables: {alg_exp_outer.variables}")
             print(f"variables_domains: {alg_exp_outer.variables_domains}")
-        except Exception as err:
-            print(err)
+        except Exception as err_outer:
+            print(err_outer)

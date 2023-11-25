@@ -64,8 +64,9 @@ class AlgExp(ABC):
     def __add__(self, other):
         return self.__magic_operation_method_result(other, Ad.PLUS)
 
-    def __contains__(self, item: int | str):
-        assert isinstance(item, (int, str)), f"{self._ERR}{ErrorMessages.TYPE_FOR_ITEM_IN_CONTAINS}"
+    def __contains__(self, item):
+        from algexptools import AtomicAlgExp
+        assert isinstance(item, (int, str, AtomicAlgExp)), f"{self._ERR}{ErrorMessages.TYPE_FOR_ITEM_IN_CONTAINS}"
 
     def __mul__(self, other):
         return self.__magic_operation_method_result(other, Ad.MULTIPLY)
@@ -145,7 +146,7 @@ class AlgExp(ABC):
         must_be_instance: str = ErrorMessages.replace(ErrorMessages.MUST_BE_INSTANCE, "Expression",
                                                       self.__class__.__name__)
         assert isinstance(expression, self.__class__), f"{self._ERR}{must_be_instance}"
-        self._content = expression.content
+        self._content = expression.content[:]
 
     def _init_check(self, expression: Any, variables_domains: dict = None) -> None:
         """

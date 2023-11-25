@@ -98,6 +98,9 @@ class IntervalAlgSet(AlgSet):
     def add_upper_limit(self):
         self._is_right_closed = True
 
+    def has_no_limits(self):
+        return self._lower_limit == complex(f"{Ad.MINUS}inf") and self._upper_limit == complex("inf")
+
     def is_closed(self):
         return self._is_left_closed and self._is_right_closed
 
@@ -143,7 +146,7 @@ class IntervalAlgSet(AlgSet):
 
     def _filter_number(self, number: Any) -> NumericAlgExp:
         number = super()._filter_number(number)
-        assert not number.has_imag(), f"{self._ERR}{ErrorMessages.CANNOT_IMAG_IN_INTERVAL}"
+        assert self.has_no_limits() or not number.has_imag(), f"{self._ERR}{ErrorMessages.CANNOT_IMAG_IN_INTERVAL}"
         real_value: float = number.value.real
         assert real_value < 0 or real_value >= 0, f"{self._ERR}{ErrorMessages.CANNOT_NAN_IN_INTERVAL}"
         return number

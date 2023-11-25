@@ -1,8 +1,7 @@
-from abc import ABC
-from copy import deepcopy
+from abc import ABC, abstractmethod
+from copy import copy, deepcopy
 from functools import singledispatchmethod
 from typing import Any, List, Tuple
-import re
 
 from algebradata import AlgebraData as Ad
 from algexptools import AlgExp
@@ -39,28 +38,14 @@ class VariableAlgExp(AlgExp, ABC):
     def variables_domains(self) -> dict:
         return self._variables_domains
 
-    def substitute(self, subs_dict: dict):
+    @abstractmethod
+    def substitute(self, arg: Any):
         """
-        Returns new instance of VariableAlgExp with substituted variables
-        based on substitution dictionary.
-        :param subs_dict: dictionary with {key: value} <=> {variable: number to substitute}
-        :return: instance of AlgExp
+        Substitutes variables for numbers in all occurrences of the given variables.
+        :param arg: substitution dictionary | number for substitution (depends on the instance type)
+        :return: new substituted instance of self-expression
         """
-        must_be_instance: str = ErrorMessages.replace(ErrorMessages.MUST_BE_INSTANCE, "Expression",
-                                                      VariableAlgExp.__name__)
-        assert isinstance(self, VariableAlgExp), f"{AlgExp._ERR}{must_be_instance}"
-        new_instance = deepcopy(self)
-        new_variables_domains: dict = deepcopy(new_instance.variables_domains)
-        for variable in subs_dict:
-            if variable in new_instance:
-                type(new_instance)._substitute(new_instance, variable, subs_dict[variable])
-                del new_variables_domains[variable]
-        if new_variables_domains:
-            exp_result = type(new_instance)(str(new_instance), new_variables_domains)
-        else:
-            exp_result = AlgExp.initializer(str(new_instance))
-        del new_instance  # this instance may contain conflicting data, it served only for content substitution
-        return exp_result
+        return NotImplemented
 
     def _correction(self, expression: str) -> str:
         # substitution for immutable contents
@@ -73,6 +58,7 @@ class VariableAlgExp(AlgExp, ABC):
 
     def _create_content_from_other_instance(self, expression):
         super()._create_content_from_other_instance(expression)
+        self._variables = expression.variables[:]
 
     def _init_check(self, expression: Any, variables_domains: dict = None) -> None:
         left_imm_br, right_imm_br = Ad.LEFT_IMMUTABLE_BRACKET, Ad.RIGHT_IMMUTABLE_BRACKET
@@ -99,6 +85,53 @@ class VariableAlgExp(AlgExp, ABC):
             for i in range(start_index, end_index + 1):
                 expression_list[i] = replace_character
         return "".join(expression_list)
+
+    def _substitute_check(self, variable, number) -> bool:
+        """
+        Checks whether:
+            1) it is possible to create NumericAlgExp instance from number
+            --
+            2) number is in variable domain of the variable
+            for which is substituted
+            --
+            3) variable exist in self-expression
+        Throws exception if point 1 is false or point 2 is false.
+        Returns True if point 3 is true, otherwise returns False.
+        :param variable: any VariableAtomicAlgExp instance or string content of this
+        :param number: any number for NumericAlgExp initialization
+        :return: True if point 3 is True, otherwise False
+        """
+        from algexptools import NumericAlgExp, NumericAtomicAlgExp, NumericCompositeAlgExp
+        number_must_be_instance: str = ErrorMessages.replace(ErrorMessages.MUST_BE_INSTANCE,
+                                                             "Expression for substitution", NumericAlgExp.__name__)
+        exp_number = number
+        if not isinstance(exp_number, (NumericAtomicAlgExp, NumericCompositeAlgExp)):
+            try:
+                exp_number = AlgExp.initializer(number, NumericAtomicAlgExp, NumericCompositeAlgExp)
+            except (AssertionError, ValueError):
+                raise ValueError(f"{self._ERR}{number_must_be_instance}")
+        # exp_number is an instance of NumericAlgExp
+        if (isinstance(variable, VariableAlgExp) and variable not in self._variables) or variable not in self:
+            return False
+        # variable is in self
+        instance_variable = self._variable_by_content(variable.content) if isinstance(
+            variable, VariableAlgExp) else self._variable_by_content(variable)
+        number_is_not_in_variables_domains: str = ErrorMessages.replace(
+            ErrorMessages.NUMBER_IS_NOT_IN_VARIABLE_DOMAIN, exp_number, self._variables_domains[instance_variable],
+            self)
+        assert exp_number in self._variables_domains[
+            instance_variable], f"{self._ERR}{number_is_not_in_variables_domains}"
+        return True
+
+    def _variable_by_content(self, content: str):
+        """
+        Returns variable from self.variables with same content like content.
+        :param content: string content of variable
+        :return: found variable from self.variables
+        """
+        for variable in self._variables:
+            if variable.content == content:
+                return variable
 
     def __correct_variables_domains(self, variables_domains: dict) -> dict:
         """
@@ -154,8 +187,9 @@ class VariableAlgExp(AlgExp, ABC):
         """
         if isinstance(expression, str):
             self._variables_domains = self.__generate_default_variables_domains()
+            self.__refresh_variables_domains(self)
         elif isinstance(expression, VariableAlgExp):
-            self._variables_domains = deepcopy(expression.variables_domains)
+            self._variables_domains = copy(expression.variables_domains)
 
     @__create_variables_domains.register(dict)
     def _2(self, variables_domains: dict) -> None:
@@ -192,17 +226,7 @@ class VariableAlgExp(AlgExp, ABC):
         :return: default variable domains for all variables in self-expression
         """
         from algsettools import IntervalAlgSet
-        default_variable_domains: dict = {}
-        found: bool
-        for variable_from_all in self._variables:
-            found = False
-            for variable_from_default_domains in default_variable_domains:
-                if variable_from_default_domains.content == variable_from_all.content:
-                    found = True
-                    break
-            if not found:
-                default_variable_domains[variable_from_all] = IntervalAlgSet()
-        return default_variable_domains
+        return {variable: IntervalAlgSet() for variable in self._variables}
 
     def __get_immutable_content_areas(self, expression: str) -> list:
         """
@@ -304,19 +328,3 @@ class VariableAlgExp(AlgExp, ABC):
             if isinstance(inner_alg_exp, VariableAlgExp):
                 variables += VariableAlgExp._found_and_get_all_variables_contents(inner_alg_exp.content)
         return list(set(variables))
-
-    @staticmethod
-    def _substitute(alg_exp, variable: str, number: Any):
-        """
-        Returns alg_exp with variable substituted for number.
-        :param alg_exp: any variable algebraic expression
-        :param variable: variable which will be substituted
-        :param number: number for substitute
-        :return: alg_exp with substituted content
-        """
-        allowed_subs_types: tuple = (int, str)
-        types_names: str = " | ".join([x.__name__ for x in allowed_subs_types])
-        must_be_instance: str = ErrorMessages.replace(ErrorMessages.MUST_BE_INSTANCE, "number", types_names)
-        assert isinstance(number, allowed_subs_types), f"{VariableAlgExp._ERR}{must_be_instance}"
-        if isinstance(number, str):
-            assert re.search(rf"{Ad.MINUS}?\d+", number), f"{AlgExp._ERR}{ErrorMessages.MUST_BE_INTEGER}"
