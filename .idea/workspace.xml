@@ -4,7 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="75184f36-84d9-4d29-b2be-6a589b6c90a8" name="Changes" comment="AlgSetTools[bug]: __contains__ from IntervalAlgSet returned False when entering a complex number under certain circumstances" />
+    <list default="true" id="75184f36-84d9-4d29-b2be-6a589b6c90a8" name="Changes" comment="Configuration files added" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -296,7 +296,14 @@
       <option name="project" value="LOCAL" />
       <updated>1700948224186</updated>
     </task>
-    <option name="localTasksCounter" value="33" />
+    <task id="LOCAL-00033" summary="Configuration files added">
+      <created>1700986906297</created>
+      <option name="number" value="00033" />
+      <option name="presentableId" value="LOCAL-00033" />
+      <option name="project" value="LOCAL" />
+      <updated>1700986906297</updated>
+    </task>
+    <option name="localTasksCounter" value="34" />
     <servers />
   </component>
   <component name="Vcs.Log.History.Properties">
@@ -331,7 +338,7 @@
                   <entry key="branch">
                     <value>
                       <list>
-                        <option value="algebratools/master" />
+                        <option value="algebratools/main" />
                       </list>
                     </value>
                   </entry>
@@ -356,12 +363,12 @@
             <list>
               <RecentGroup>
                 <option name="FILTER_VALUES">
-                  <option value="algebratools/master" />
+                  <option value="algebratools/main" />
                 </option>
               </RecentGroup>
               <RecentGroup>
                 <option name="FILTER_VALUES">
-                  <option value="algebratools/main" />
+                  <option value="algebratools/master" />
                 </option>
               </RecentGroup>
               <RecentGroup>
@@ -376,7 +383,6 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="CommonUtils[improvement]: Modification of parameters in replace method in ErrorMessages" />
     <MESSAGE value="Code cleanup" />
     <MESSAGE value="AlgSetTools[bug]: Missing import of AlgSet classes" />
     <MESSAGE value="AlgExpTools[improvement]: Deleting unnecessary code" />
@@ -401,7 +407,8 @@
     <MESSAGE value="AlgSetTools[improvement]: All exception types changed to AlgSetError" />
     <MESSAGE value="AlgExpTools[improvement]: variablealgexp.__check_variables_domains changed to static method" />
     <MESSAGE value="AlgSetTools[bug]: __contains__ from IntervalAlgSet returned False when entering a complex number under certain circumstances" />
-    <option name="LAST_COMMIT_MESSAGE" value="AlgSetTools[bug]: __contains__ from IntervalAlgSet returned False when entering a complex number under certain circumstances" />
+    <MESSAGE value="Configuration files added" />
+    <option name="LAST_COMMIT_MESSAGE" value="Configuration files added" />
   </component>
   <component name="XDebuggerManager">
     <watches-manager>
