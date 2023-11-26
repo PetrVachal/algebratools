@@ -1,0 +1,414 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="75184f36-84d9-4d29-b2be-6a589b6c90a8" name="Changes" comment="AlgSetTools[bug]: __contains__ from IntervalAlgSet returned False when entering a complex number under certain circumstances" />
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="Python Script" />
+      </list>
+    </option>
+  </component>
+  <component name="Git.Settings">
+    <excluded-from-favorite>
+      <branch-storage>
+        <map>
+          <entry type="LOCAL">
+            <value>
+              <list>
+                <branch-info repo="$PROJECT_DIR$" source="master" />
+              </list>
+            </value>
+          </entry>
+        </map>
+      </branch-storage>
+    </excluded-from-favorite>
+    <option name="RECENT_BRANCH_BY_REPOSITORY">
+      <map>
+        <entry key="$PROJECT_DIR$" value="master" />
+      </map>
+    </option>
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="HighlightingSettingsPerFile">
+    <setting file="file://$PROJECT_DIR$/algexptools/testing.py" root0="FORCE_HIGHLIGHTING" />
+  </component>
+  <component name="MarkdownSettingsMigration">
+    <option name="stateVersion" value="1" />
+  </component>
+  <component name="ProblemsViewState">
+    <option name="selectedTabId" value="CurrentFile" />
+  </component>
+  <component name="ProjectId" id="2YJQuwxuszUCgFWmjR4GdlteQUs" />
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
+  <component name="ProjectViewState">
+    <option name="autoscrollFromSource" value="true" />
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;last_opened_file_path&quot;: &quot;C:/Users/petva/PycharmProjects/inheritance_experiments&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;editor.preferences.appearance&quot;
+  }
+}</component>
+  <component name="ShelveChangesManager" show_recycled="true" />
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="75184f36-84d9-4d29-b2be-6a589b6c90a8" name="Changes" comment="" />
+      <created>1700241428999</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1700241428999</updated>
+    </task>
+    <task id="LOCAL-00001" summary="AlgebraTools: AlgExpTools and AlgSetTools created">
+      <created>1700242559245</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1700242559245</updated>
+    </task>
+    <task id="LOCAL-00002" summary="AlgExpTools[bug]: After variable substitution, variables_domains of other variables were not preserved">
+      <created>1700247652418</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1700247652419</updated>
+    </task>
+    <task id="LOCAL-00003" summary="AlgExpTools[bug]: After variable substitution, variables_domains of other variables were not preserved">
+      <created>1700248756482</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1700248756482</updated>
+    </task>
+    <task id="LOCAL-00004" summary="AlgExpTools[bug]: Incomplete variables_domains under certain circumstances">
+      <created>1700252197088</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1700252197088</updated>
+    </task>
+    <task id="LOCAL-00005" summary="AlgExpTools[improvement]: Prohibition of entering signs in VariableAtomicAlgExp string">
+      <created>1700324128610</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1700324128610</updated>
+    </task>
+    <task id="LOCAL-00006" summary="CommonUtils[improvement]: Simplifying constants">
+      <created>1700326968602</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1700326968602</updated>
+    </task>
+    <task id="LOCAL-00007" summary="CommonUtils[improvement]: Modification of parameters in replace method in ErrorMessages">
+      <created>1700331464428</created>
+      <option name="number" value="00007" />
+      <option name="presentableId" value="LOCAL-00007" />
+      <option name="project" value="LOCAL" />
+      <updated>1700331464428</updated>
+    </task>
+    <task id="LOCAL-00008" summary="Code cleanup">
+      <created>1700332698091</created>
+      <option name="number" value="00008" />
+      <option name="presentableId" value="LOCAL-00008" />
+      <option name="project" value="LOCAL" />
+      <updated>1700332698091</updated>
+    </task>
+    <task id="LOCAL-00009" summary="AlgSetTools[bug]: Missing import of AlgSet classes">
+      <created>1700332870521</created>
+      <option name="number" value="00009" />
+      <option name="presentableId" value="LOCAL-00009" />
+      <option name="project" value="LOCAL" />
+      <updated>1700332870521</updated>
+    </task>
+    <task id="LOCAL-00010" summary="AlgExpTools[improvement]: Deleting unnecessary code">
+      <created>1700333326955</created>
+      <option name="number" value="00010" />
+      <option name="presentableId" value="LOCAL-00010" />
+      <option name="project" value="LOCAL" />
+      <updated>1700333326955</updated>
+    </task>
+    <task id="LOCAL-00011" summary="AlgExpTools[improvement]: variables method returns a list of instances instead of a list of contents">
+      <created>1700334637345</created>
+      <option name="number" value="00011" />
+      <option name="presentableId" value="LOCAL-00011" />
+      <option name="project" value="LOCAL" />
+      <updated>1700334637345</updated>
+    </task>
+    <task id="LOCAL-00012" summary="AlgExpTools[improvement]: Change method substitute from static to self">
+      <created>1700335634436</created>
+      <option name="number" value="00012" />
+      <option name="presentableId" value="LOCAL-00012" />
+      <option name="project" value="LOCAL" />
+      <updated>1700335634436</updated>
+    </task>
+    <task id="LOCAL-00013" summary="AlgExpTools[improvement]: Overload of __create_variables_domains method">
+      <created>1700337860937</created>
+      <option name="number" value="00013" />
+      <option name="presentableId" value="LOCAL-00013" />
+      <option name="project" value="LOCAL" />
+      <updated>1700337860937</updated>
+    </task>
+    <task id="LOCAL-00014" summary="AlgExpTools[improvement]: variables_domains keys are exp instances instead of content strings">
+      <created>1700385583837</created>
+      <option name="number" value="00014" />
+      <option name="presentableId" value="LOCAL-00014" />
+      <option name="project" value="LOCAL" />
+      <updated>1700385583837</updated>
+    </task>
+    <task id="LOCAL-00015" summary="AlgExpTools[bug]: It was possible to set variable domain even if it was not an instance of AlgSet">
+      <created>1700386224509</created>
+      <option name="number" value="00015" />
+      <option name="presentableId" value="LOCAL-00015" />
+      <option name="project" value="LOCAL" />
+      <updated>1700386224509</updated>
+    </task>
+    <task id="LOCAL-00016" summary="AlgExpTools[improvement]: Improvements in _alg_exp_structure method">
+      <created>1700412165220</created>
+      <option name="number" value="00016" />
+      <option name="presentableId" value="LOCAL-00016" />
+      <option name="project" value="LOCAL" />
+      <updated>1700412165220</updated>
+    </task>
+    <task id="LOCAL-00017" summary="AlgExpTools[bug]: It was possible to enter immutable content variables with a minus sign">
+      <created>1700418823202</created>
+      <option name="number" value="00017" />
+      <option name="presentableId" value="LOCAL-00017" />
+      <option name="project" value="LOCAL" />
+      <updated>1700418823202</updated>
+    </task>
+    <task id="LOCAL-00018" summary="AlgExpTools[improvement]: Delete property immutable_contents">
+      <created>1700424034869</created>
+      <option name="number" value="00018" />
+      <option name="presentableId" value="LOCAL-00018" />
+      <option name="project" value="LOCAL" />
+      <updated>1700424034869</updated>
+    </task>
+    <task id="LOCAL-00019" summary="AlgExpTools[improvement]: Splitting _alg_exp_structure method into two classes">
+      <created>1700461266957</created>
+      <option name="number" value="00019" />
+      <option name="presentableId" value="LOCAL-00019" />
+      <option name="project" value="LOCAL" />
+      <updated>1700461266957</updated>
+    </task>
+    <task id="LOCAL-00020" summary="AlgExpTools[improvement]: Simplification of initializer method parameters">
+      <created>1700461944457</created>
+      <option name="number" value="00020" />
+      <option name="presentableId" value="LOCAL-00020" />
+      <option name="project" value="LOCAL" />
+      <updated>1700461944457</updated>
+    </task>
+    <task id="LOCAL-00021" summary="AlgExpTools[improvement]: Internal expressions creation specification">
+      <created>1700462385722</created>
+      <option name="number" value="00021" />
+      <option name="presentableId" value="LOCAL-00021" />
+      <option name="project" value="LOCAL" />
+      <updated>1700462385722</updated>
+    </task>
+    <task id="LOCAL-00022" summary="AlgExpTools[improvement]: Using a single instance for the same variables">
+      <created>1700595006369</created>
+      <option name="number" value="00022" />
+      <option name="presentableId" value="LOCAL-00022" />
+      <option name="project" value="LOCAL" />
+      <updated>1700595006370</updated>
+    </task>
+    <task id="LOCAL-00023" summary="AlgExpTools[bug]: Incorrect variables domains in inner expressions under certain circumstances">
+      <created>1700678108201</created>
+      <option name="number" value="00023" />
+      <option name="presentableId" value="LOCAL-00023" />
+      <option name="project" value="LOCAL" />
+      <updated>1700678108201</updated>
+    </task>
+    <task id="LOCAL-00024" summary="AlgExpTools[bug]: Incorrect variables domains in inner expressions under certain circumstances">
+      <created>1700768750209</created>
+      <option name="number" value="00024" />
+      <option name="presentableId" value="LOCAL-00024" />
+      <option name="project" value="LOCAL" />
+      <updated>1700768750209</updated>
+    </task>
+    <task id="LOCAL-00025" summary="AlgExpTools[improvement]: Simplifying the instantiation of expressions in initializer method">
+      <created>1700769528968</created>
+      <option name="number" value="00025" />
+      <option name="presentableId" value="LOCAL-00025" />
+      <option name="project" value="LOCAL" />
+      <updated>1700769528968</updated>
+    </task>
+    <task id="LOCAL-00026" summary="AlgExpTools[bug]: Substitution did not work">
+      <created>1700925061496</created>
+      <option name="number" value="00026" />
+      <option name="presentableId" value="LOCAL-00026" />
+      <option name="project" value="LOCAL" />
+      <updated>1700925061496</updated>
+    </task>
+    <task id="LOCAL-00027" summary="AlgSetTools[bug]: Could not import inpt file when using AlgSetTools classes externally">
+      <created>1700925445883</created>
+      <option name="number" value="00027" />
+      <option name="presentableId" value="LOCAL-00027" />
+      <option name="project" value="LOCAL" />
+      <updated>1700925445883</updated>
+    </task>
+    <task id="LOCAL-00028" summary="AlgExpTools[improvement]: Deleting unnecessary variable VariableAlgExp._immutable_contents">
+      <created>1700931141738</created>
+      <option name="number" value="00028" />
+      <option name="presentableId" value="LOCAL-00028" />
+      <option name="project" value="LOCAL" />
+      <updated>1700931141738</updated>
+    </task>
+    <task id="LOCAL-00029" summary="AlgExpTools[improvement]: All exception types changed to AlgExpError">
+      <created>1700946336461</created>
+      <option name="number" value="00029" />
+      <option name="presentableId" value="LOCAL-00029" />
+      <option name="project" value="LOCAL" />
+      <updated>1700946336461</updated>
+    </task>
+    <task id="LOCAL-00030" summary="AlgSetTools[improvement]: All exception types changed to AlgSetError">
+      <created>1700947409677</created>
+      <option name="number" value="00030" />
+      <option name="presentableId" value="LOCAL-00030" />
+      <option name="project" value="LOCAL" />
+      <updated>1700947409677</updated>
+    </task>
+    <task id="LOCAL-00031" summary="AlgExpTools[improvement]: variablealgexp.__check_variables_domains changed to static method">
+      <created>1700947631876</created>
+      <option name="number" value="00031" />
+      <option name="presentableId" value="LOCAL-00031" />
+      <option name="project" value="LOCAL" />
+      <updated>1700947631876</updated>
+    </task>
+    <task id="LOCAL-00032" summary="AlgSetTools[bug]: __contains__ from IntervalAlgSet returned False when entering a complex number under certain circumstances">
+      <created>1700948224186</created>
+      <option name="number" value="00032" />
+      <option name="presentableId" value="LOCAL-00032" />
+      <option name="project" value="LOCAL" />
+      <updated>1700948224186</updated>
+    </task>
+    <option name="localTasksCounter" value="33" />
+    <servers />
+  </component>
+  <component name="Vcs.Log.History.Properties">
+    <option name="COLUMN_ID_ORDER">
+      <list>
+        <option value="Default.Root" />
+        <option value="Default.Author" />
+        <option value="Default.Date" />
+        <option value="Default.Subject" />
+        <option value="Space.CommitStatus" />
+      </list>
+    </option>
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="549c7832-efa2-4ff3-9aed-851575738522">
+          <value>
+            <State />
+          </value>
+        </entry>
+        <entry key="6b5abbd2-c707-4ef5-b050-2f2cd58c4593">
+          <value>
+            <State />
+          </value>
+        </entry>
+        <entry key="MAIN">
+          <value>
+            <State>
+              <option name="FILTERS">
+                <map>
+                  <entry key="branch">
+                    <value>
+                      <list>
+                        <option value="algebratools/master" />
+                      </list>
+                    </value>
+                  </entry>
+                </map>
+              </option>
+              <option name="COLUMN_ID_WIDTH">
+                <map>
+                  <entry key="Table.Default.Author.ColumnIdWidth" value="87" />
+                  <entry key="Table.Default.Date.ColumnIdWidth" value="72" />
+                  <entry key="Table.Space.CommitStatus.ColumnIdWidth" value="71" />
+                </map>
+              </option>
+            </State>
+          </value>
+        </entry>
+      </map>
+    </option>
+    <option name="RECENT_FILTERS">
+      <map>
+        <entry key="Branch">
+          <value>
+            <list>
+              <RecentGroup>
+                <option name="FILTER_VALUES">
+                  <option value="algebratools/master" />
+                </option>
+              </RecentGroup>
+              <RecentGroup>
+                <option name="FILTER_VALUES">
+                  <option value="algebratools/main" />
+                </option>
+              </RecentGroup>
+              <RecentGroup>
+                <option name="FILTER_VALUES">
+                  <option value="master" />
+                </option>
+              </RecentGroup>
+            </list>
+          </value>
+        </entry>
+      </map>
+    </option>
+  </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="CommonUtils[improvement]: Modification of parameters in replace method in ErrorMessages" />
+    <MESSAGE value="Code cleanup" />
+    <MESSAGE value="AlgSetTools[bug]: Missing import of AlgSet classes" />
+    <MESSAGE value="AlgExpTools[improvement]: Deleting unnecessary code" />
+    <MESSAGE value="AlgExpTools[improvement]: variables method returns a list of instances instead of a list of contents" />
+    <MESSAGE value="AlgExpTools[improvement]: Change method substitute from static to self" />
+    <MESSAGE value="AlgExpTools[improvement]: Overload of __create_variables_domains method" />
+    <MESSAGE value="AlgExpTools[improvement]: variables_domains keys are exp instances instead of content strings" />
+    <MESSAGE value="AlgExpTools[bug]: It was possible to set variable domain even if it was not an instance of AlgSet" />
+    <MESSAGE value="AlgExpTools[improvement]: Improvements in _alg_exp_structure method" />
+    <MESSAGE value="AlgExpTools[bug]: It was possible to enter immutable content variables with a minus sign" />
+    <MESSAGE value="AlgExpTools[improvement]: Delete property immutable_contents" />
+    <MESSAGE value="AlgExpTools[improvement]: Splitting _alg_exp_structure method into two classes" />
+    <MESSAGE value="AlgExpTools[improvement]: Simplification of initializer method parameters" />
+    <MESSAGE value="AlgExpTools[improvement]: Internal expressions creation specification" />
+    <MESSAGE value="AlgExpTools[improvement]: Using a single instance for the same variables" />
+    <MESSAGE value="AlgExpTools[bug]: Incorrect variables domains in inner expressions under certain circumstances" />
+    <MESSAGE value="AlgExpTools[improvement]: Simplifying the instantiation of expressions in initializer method" />
+    <MESSAGE value="AlgExpTools[bug]: Substitution did not work" />
+    <MESSAGE value="AlgSetTools[bug]: Could not import inpt file when using AlgSetTools classes externally" />
+    <MESSAGE value="AlgExpTools[improvement]: Deleting unnecessary variable VariableAlgExp._immutable_contents" />
+    <MESSAGE value="AlgExpTools[improvement]: All exception types changed to AlgExpError" />
+    <MESSAGE value="AlgSetTools[improvement]: All exception types changed to AlgSetError" />
+    <MESSAGE value="AlgExpTools[improvement]: variablealgexp.__check_variables_domains changed to static method" />
+    <MESSAGE value="AlgSetTools[bug]: __contains__ from IntervalAlgSet returned False when entering a complex number under certain circumstances" />
+    <option name="LAST_COMMIT_MESSAGE" value="AlgSetTools[bug]: __contains__ from IntervalAlgSet returned False when entering a complex number under certain circumstances" />
+  </component>
+  <component name="XDebuggerManager">
+    <watches-manager>
+      <configuration name="PythonConfigurationType">
+        <watch expression="changed_inner_exp" />
+        <watch expression="changed_inner_exp" />
+      </configuration>
+    </watches-manager>
+  </component>
+</project>
